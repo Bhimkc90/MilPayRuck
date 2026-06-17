@@ -15,6 +15,9 @@ connectDB();
 
 const app = express();
 
+app.set("view engine", "ejs");
+app.use(express.static("public"));
+
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
@@ -24,9 +27,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/budget", budgetRoutes);
 
 app.get("/", (req, res) => {
-  res.json({
-    message: "MilPayRuck API Running",
-  });
+  res.render("index");
 });
 
 const PORT = process.env.PORT || 5000;
