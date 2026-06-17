@@ -5,6 +5,7 @@ const helmet = require("helmet");
 
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use(helmet());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/profile", profileRoutes);
 
 app.get("/", (req, res) => {
   res.json({
