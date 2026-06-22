@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const budgetRoutes = require("./routes/budgetRoutes");
+const transactionRoutes = require("./routes/transactionRoutes");
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(helmet());
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/budget", budgetRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 app.get("/", (req, res) => {
   res.render("index");
