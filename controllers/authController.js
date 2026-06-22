@@ -11,6 +11,32 @@ const registerUser = async (req, res) => {
       email,
       password,
     } = req.body;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasLowercase = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecialCharacter = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+        const hasMinimumLength = password.length >= 10;
+
+        if (!emailPattern.test(email)) {
+          return res.status(400).json({
+            message: "Please enter a valid email address.",
+          });
+        }
+
+        if (
+          !hasMinimumLength ||
+          !hasUppercase ||
+          !hasLowercase ||
+          !hasNumber ||
+          !hasSpecialCharacter
+        ) {
+          return res.status(400).json({
+            message:
+              "Password must be at least 10 characters long and include uppercase, lowercase, number, and special character.",
+          });
+        }
 
     const existingUser = await User.findOne({ email });
 

@@ -8,6 +8,7 @@ const authRoutes = require("./routes/authRoutes");
 const profileRoutes = require("./routes/profileRoutes");
 const budgetRoutes = require("./routes/budgetRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
+const viewRoutes = require("./routes/viewRoutes");
 
 dotenv.config();
 
@@ -21,12 +22,15 @@ app.use(express.static("public"));
 
 app.use(express.json());
 app.use(cors());
-app.use(helmet());
+//app.use(helmet());
+
+app.use("/", viewRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/budget", budgetRoutes);
 app.use("/api/transactions", transactionRoutes);
+
 
 app.get("/", (req, res) => {
   res.render("index");
