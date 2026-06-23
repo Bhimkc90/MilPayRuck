@@ -51,8 +51,16 @@ router.get("/dashboard", async (req, res) => {
   });
 });
 
-router.get("/profile", (req, res) => {
-  res.render("profile/profile");
+
+
+router.get("/profile", async (req, res) => {
+  const userId = "6a30f17842ab4a2c8fc3120b";
+
+  const profile = await Profile.findOne({ userId }).lean();
+
+  res.render("profile/profile", {
+    profile,
+  });
 });
 
 

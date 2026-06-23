@@ -1,1 +1,34 @@
 <h1>Profile Page</h1>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile - MilPayRuck</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/profile">Profile</a>
+        <a href="/budget">Budget</a>
+        <a href="/transactions">Transactions</a>
+    </nav>
+
+    <div class="container">
+        <h1>Profile</h1>
+
+        <% if (profile) { %>
+            <p><strong>User Type:</strong> <%= profile.userType %></p>
+            <p><strong>Rank:</strong> <%= profile.rank %></p>
+            <p><strong>Time in Service:</strong> <%= profile.timeInService %> years</p>
+            <p><strong>ZIP Code:</strong> <%= profile.zipCode %></p>
+            <p><strong>Dependents:</strong> <%= profile.dependents %></p>
+            <p><strong>Duty Location:</strong> <%= profile.dutyLocation %></p>
+        <% } else { %>
+            <p>No profile found.</p>
+        <% } %>
+    </div>
+
+</body>
+</html>
