@@ -1,26 +1,132 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    text-align: center;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #111827;
+    color: #f9fafb;
+}
+
+nav {
+    background: #020617;
+    padding: 16px 24px;
+    border-bottom: 2px solid #facc15;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: #facc15;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: white;
 }
 
 .container {
-    margin-top: 100px;
+    max-width: 1000px;
+    margin: 50px auto;
+    background: #1f2937;
+    padding: 32px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 h1 {
-    color: #1f2937;
-    font-size: 48px;
+    color: #facc15;
+    font-size: 42px;
+    margin-top: 0;
+}
+
+h2, h3 {
+    color: #fde68a;
 }
 
 p {
-    font-size: 24px;
-    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+input,
+select {
+    width: 100%;
+    max-width: 420px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #374151;
+    background: #111827;
+    color: white;
+    font-size: 16px;
 }
 
 button {
-    padding: 15px 30px;
-    margin: 10px;
-    font-size: 18px;
+    background: #facc15;
+    color: #111827;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-weight: bold;
     cursor: pointer;
+}
+
+button:hover {
+    background: #fde047;
+}
+
+a {
+    color: #facc15;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 24px;
+    background: #111827;
+}
+
+th {
+    background: #020617;
+    color: #facc15;
+}
+
+th,
+td {
+    padding: 12px;
+    border: 1px solid #374151;
+    text-align: left;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-top: 24px;
+}
+
+.card {
+    background: #111827;
+    border: 1px solid #374151;
+    border-left: 5px solid #facc15;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.card p {
+    font-size: 28px;
+    font-weight: bold;
+    color: #facc15;
+}
+
+.buttons {
+    margin-top: 24px;
+}
+
+.buttons button,
+.buttons a {
+    display: inline-block;
+    margin: 8px;
 }

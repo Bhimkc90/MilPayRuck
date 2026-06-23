@@ -3,6 +3,7 @@ const router = express.Router();
 const Transaction = require("../models/Transaction");
 const Budget = require("../models/Budget");
 const Profile = require("../models/Profile");
+const User = require("../models/User");
 
 const {
   registerUser,
@@ -33,10 +34,12 @@ router.get("/login", (req, res) => {
 router.get("/dashboard", async (req, res) => {
   const userId = req.session.userId;
 
+  const user = await User.findById(userId).lean();
   const budget = await Budget.findOne({ userId }).lean();
 
   if (!budget) {
     return res.render("dashboard/dashboard", {
+      user,
       income: 0,
       totalExpenses: 0,
       remainingCash: 0,
@@ -50,7 +53,8 @@ router.get("/dashboard", async (req, res) => {
     totalExpenses += budget.expenses[category];
   }
 
-  const remainingCash = budget.monthlyNetIncome - totalExpenses;
+  const remainingCash =
+    budget.monthlyNetIncome - totalExpenses;
 
   const savingsRate =
     ((budget.expenses.savings + budget.expenses.investments) /
@@ -58,13 +62,13 @@ router.get("/dashboard", async (req, res) => {
     100;
 
   res.render("dashboard/dashboard", {
+    user,
     income: budget.monthlyNetIncome,
     totalExpenses,
     remainingCash,
     savingsRate: savingsRate.toFixed(1),
   });
 });
-
 
 
 //Profile

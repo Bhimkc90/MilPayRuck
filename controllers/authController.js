@@ -56,9 +56,7 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).json({
-      message: "User registered successfully",
-    });
+    res.redirect("/login");
 
   } catch (error) {
     res.status(500).json({
@@ -99,7 +97,7 @@ const loginUser = async (req, res) => {
     req.session.userId = user._id;
 
     res.redirect("/dashboard");
-    
+
 
   } catch (error) {
     res.status(500).json({
