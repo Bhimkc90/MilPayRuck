@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile - MilPayRuck</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/logout">Logout</a>
+</nav>
+
+<div class="container">
+    <h1>Edit Profile</h1>
+
+    <form action="/edit-profile" method="POST">
+        <input type="text" name="rank" placeholder="Rank" value="<%= profile ? profile.rank : '' %>" required>
+        <br><br>
+
+        <input type="number" name="timeInService" placeholder="Time in Service" value="<%= profile ? profile.timeInService : '' %>" required>
+        <br><br>
+
+        <input type="text" name="zipCode" placeholder="ZIP Code" value="<%= profile ? profile.zipCode : '' %>" required>
+        <br><br>
+
+        <input type="number" name="dependents" placeholder="Dependents" value="<%= profile ? profile.dependents : '' %>" required>
+        <br><br>
+
+        <input type="text" name="dutyLocation" placeholder="Duty Location" value="<%= profile ? profile.dutyLocation : '' %>" required>
+        <br><br>
+
+        <button type="submit">Save Profile</button>
+    </form>
+</div>
+
+</body>
+</html>

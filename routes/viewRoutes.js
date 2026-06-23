@@ -106,15 +106,21 @@ router.get("/transactions", async (req, res) => {
 });
 
 router.get("/add-transaction", (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+
   res.render("transactions/addTransaction");
 });
 
 
 router.post("/add-transaction", async (req, res) => {
-  const userId = req.session.userId;
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
 
   await Transaction.create({
-    userId: userId,
+    userId: req.session.userId,
     category: req.body.category,
     amount: req.body.amount,
     description: req.body.description,
@@ -160,8 +166,54 @@ router.post("/edit-transaction/:id", async (req, res) => {
 
 
 
+router.get("/edit-profile", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+
+  const profile = await Profile.findOne({
+    userId: req.session.userId,
+  }).lean();
+
+  res.render("profile/editProfile", {
+    profile,
+  });
+});
+
+router.post("/edit-profile", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+
+  await Profile.findOneAndUpdate(
+    { userId: req.session.userId },
+    {
+      userId: req.session.userId,
+      userType: "military",
+      rank: req.body.rank,
+      timeInService: req.body.timeInService,
+      zipCode: req.body.zipCode,
+      dependents: req.body.dependents,
+      dutyLocation: req.body.dutyLocation,
+    },
+    { upsert: true, new: true }
+  );
+
+  res.redirect("/profile");
+});
+
+
+
+
+router.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/login");
+  });
+});
+
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
+
 
 module.exports = router;
