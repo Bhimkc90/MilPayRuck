@@ -110,6 +110,11 @@ router.post("/add-transaction", async (req, res) => {
 
 
 
+router.post("/delete-transaction/:id", async (req, res) => {
+  await Transaction.findByIdAndDelete(req.params.id);
+
+  res.redirect("/transactions");
+});
 
 
 
