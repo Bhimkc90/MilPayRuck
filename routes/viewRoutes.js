@@ -91,6 +91,28 @@ router.get("/transactions", async (req, res) => {
   });
 });
 
+router.get("/add-transaction", (req, res) => {
+  res.render("transactions/addTransaction");
+});
+
+
+router.post("/add-transaction", async (req, res) => {
+  await Transaction.create({
+    userId: "6a30f17842ab4a2c8fc3120b",
+    category: req.body.category,
+    amount: req.body.amount,
+    description: req.body.description,
+    type: req.body.type,
+  });
+
+  res.redirect("/transactions");
+});
+
+
+
+
+
+
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
