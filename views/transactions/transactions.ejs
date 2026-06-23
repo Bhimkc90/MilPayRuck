@@ -26,7 +26,7 @@
                 <th>Type</th>
                 <th>Description</th>
                 <th>Date</th>
-                <th>Action</th>
+                <th>Actions</th>
             </tr>
 
             <% transactions.forEach(transaction => { %>
@@ -38,11 +38,21 @@
                     <td><%= transaction.transactionDate.toDateString() %></td>
 
                     <td>
-                        <form action="/delete-transaction/<%= transaction._id %>" method="POST">
+
+                        <a href="/edit-transaction/<%= transaction._id %>">
+                            Edit
+                        </a>
+                    
+                        <form
+                            action="/delete-transaction/<%= transaction._id %>"
+                            method="POST"
+                            style="display:inline;"
+                        >
                             <button type="submit">
                                 Delete
                             </button>
                         </form>
+                    
                     </td>
                 </tr>
             <% }) %>

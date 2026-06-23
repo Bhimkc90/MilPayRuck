@@ -25,9 +25,18 @@ router.get("/login", (req, res) => {
 
 
 router.get("/dashboard", async (req, res) => {
-  const userId = "6a30f17842ab4a2c8fc3120b";
+  const userId = req.session.userId;
 
   const budget = await Budget.findOne({ userId }).lean();
+
+  if (!budget) {
+    return res.render("dashboard/dashboard", {
+      income: 0,
+      totalExpenses: 0,
+      remainingCash: 0,
+      savingsRate: "0.0",
+    });
+  }
 
   let totalExpenses = 0;
 
@@ -35,8 +44,7 @@ router.get("/dashboard", async (req, res) => {
     totalExpenses += budget.expenses[category];
   }
 
-  const remainingCash =
-    budget.monthlyNetIncome - totalExpenses;
+  const remainingCash = budget.monthlyNetIncome - totalExpenses;
 
   const savingsRate =
     ((budget.expenses.savings + budget.expenses.investments) /
@@ -52,9 +60,8 @@ router.get("/dashboard", async (req, res) => {
 });
 
 
-
 router.get("/profile", async (req, res) => {
-  const userId = "6a30f17842ab4a2c8fc3120b";
+  const userId = req.session.userId;
 
   const profile = await Profile.findOne({ userId }).lean();
 
@@ -67,9 +74,16 @@ router.get("/profile", async (req, res) => {
 
 
 router.get("/budget", async (req, res) => {
-  const userId = "6a30f17842ab4a2c8fc3120b";
+  const userId = req.session.userId;
 
   const budget = await Budget.findOne({ userId }).lean();
+
+  if (!budget) {
+    return res.render("budget/budget", {
+      income: 0,
+      expenses: null,
+    });
+  }
 
   res.render("budget/budget", {
     income: budget.monthlyNetIncome,
@@ -80,7 +94,7 @@ router.get("/budget", async (req, res) => {
 
 
 router.get("/transactions", async (req, res) => {
-  const userId = "6a30f17842ab4a2c8fc3120b";
+  const userId = req.session.userId;
 
   const transactions = await Transaction.find({ userId }).sort({
     transactionDate: -1,
@@ -97,8 +111,10 @@ router.get("/add-transaction", (req, res) => {
 
 
 router.post("/add-transaction", async (req, res) => {
+  const userId = req.session.userId;
+
   await Transaction.create({
-    userId: "6a30f17842ab4a2c8fc3120b",
+    userId: userId,
     category: req.body.category,
     amount: req.body.amount,
     description: req.body.description,
@@ -115,6 +131,33 @@ router.post("/delete-transaction/:id", async (req, res) => {
 
   res.redirect("/transactions");
 });
+
+
+router.get("/edit-transaction/:id", async (req, res) => {
+  const transaction = await Transaction.findById(
+    req.params.id
+  ).lean();
+
+  res.render("transactions/editTransaction", {
+    transaction,
+  });
+});
+
+
+router.post("/edit-transaction/:id", async (req, res) => {
+  await Transaction.findByIdAndUpdate(
+    req.params.id,
+    {
+      category: req.body.category,
+      amount: req.body.amount,
+      description: req.body.description,
+      type: req.body.type,
+    }
+  );
+
+  res.redirect("/transactions");
+});
+
 
 
 

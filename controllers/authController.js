@@ -96,10 +96,10 @@ const loginUser = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.json({
-      message: "Login successful",
-      token,
-    });
+    req.session.userId = user._id;
+
+    res.redirect("/dashboard");
+    
 
   } catch (error) {
     res.status(500).json({

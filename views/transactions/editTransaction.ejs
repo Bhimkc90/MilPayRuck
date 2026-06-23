@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Transaction - MilPayRuck</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/profile">Profile</a>
+        <a href="/budget">Budget</a>
+        <a href="/transactions">Transactions</a>
+        <a href="/add-transaction">Add Transaction</a>
+    </nav>
+
+    <div class="container">
+        <h1>Edit Transaction</h1>
+
+        <form action="/edit-transaction/<%= transaction._id %>" method="POST">
+
+            <input
+                type="text"
+                name="category"
+                value="<%= transaction.category %>"
+                required
+            >
+            <br><br>
+
+            <input
+                type="number"
+                name="amount"
+                value="<%= transaction.amount %>"
+                required
+            >
+            <br><br>
+
+            <input
+                type="text"
+                name="description"
+                value="<%= transaction.description %>"
+                required
+            >
+            <br><br>
+
+            <select name="type">
+                <option value="expense" <%= transaction.type === "expense" ? "selected" : "" %>>
+                    Expense
+                </option>
+                <option value="income" <%= transaction.type === "income" ? "selected" : "" %>>
+                    Income
+                </option>
+            </select>
+
+            <br><br>
+
+            <button type="submit">Update Transaction</button>
+        </form>
+    </div>
+
+</body>
+</html>
