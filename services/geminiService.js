@@ -32,7 +32,12 @@ const callGemini = async (prompt) => {
 
   if (!response.ok) {
     console.log("Gemini API error:", data);
-    throw new Error("Gemini API request failed");
+  
+    if (data.error && data.error.code === 429) {
+      return "AI Coach is connected, but the free Gemini API limit has been reached. Please try again later.";
+    }
+  
+    return "AI Coach is temporarily unavailable. Please try again later.";
   }
 
   return data.candidates[0].content.parts[0].text;
