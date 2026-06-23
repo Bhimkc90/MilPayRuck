@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const Transaction = require("../models/Transaction");
 
 const {
   registerUser,
@@ -30,8 +31,16 @@ router.get("/budget", (req, res) => {
   res.render("budget/budget");
 });
 
-router.get("/transactions", (req, res) => {
-  res.render("transactions/transactions");
+router.get("/transactions", async (req, res) => {
+  const userId = "6a30f17842ab4a2c8fc3120b";
+
+  const transactions = await Transaction.find({ userId }).sort({
+    transactionDate: -1,
+  });
+
+  res.render("transactions/transactions", {
+    transactions,
+  });
 });
 
 router.post("/register", registerUser);
