@@ -9,6 +9,7 @@ const {
   loginUser,
 } = require("../controllers/authController");
 
+const { getBahRate } = require("../services/bahService");
 
 
 //Register Page
@@ -274,34 +275,105 @@ router.get("/pay-calculator", async (req, res) => {
 
 router.post("/pay-calculator", async (req, res) => {
   const rank = req.body.rank;
-  const timeInService = Number(req.body.timeInService);
-  const zipCode = req.body.zipCode;
   const dependents = req.body.dependents;
 
-  let basePay = 0;
+  const basePayTable = {
+    E1: 2017,
+    E2: 2261,
+    E3: 2378,
+    E4: 2633,
+    E5: 3226,
+    E6: 4858,
+    E7: 5625,
+    E8: 6323,
+    E9: 7470,
 
-  if (rank === "E6" && timeInService >= 10) {
-    basePay = 4858;
-  } else if (rank === "E5" && timeInService >= 8) {
-    basePay = 3950;
-  } else {
-    basePay = 3000;
-  }
+    W1: 3739,
+    W2: 4260,
+    W3: 4826,
+    W4: 5320,
+    W5: 7489,
 
-  const bas = 465;
+    O1: 3826,
+    O2: 4419,
+    O3: 5113,
+    O4: 5810,
+    O5: 6754,
+    O6: 8104,
+    O7: 10638,
+    O8: 12803,
+    O9: 18131,
+    O10: 18131,
+  };
 
-  let bah = 0;
+  const bahWithDependents = {
+    E1: 3780,
+    E2: 3780,
+    E3: 3780,
+    E4: 3780,
+    E5: 4200,
+    E6: 5097,
+    E7: 5300,
+    E8: 5600,
+    E9: 5900,
 
-  if (zipCode === "11368" && dependents === "yes") {
-    bah = 5097;
-  } else if (zipCode === "11368" && dependents === "no") {
-    bah = 4300;
-  } else {
-    bah = 2500;
-  }
+    W1: 5100,
+    W2: 5200,
+    W3: 5350,
+    W4: 5500,
+    W5: 5700,
+
+    O1: 4300,
+    O2: 4700,
+    O3: 5400,
+    O4: 5700,
+    O5: 6000,
+    O6: 6200,
+    O7: 6400,
+    O8: 6500,
+    O9: 6600,
+    O10: 6700,
+  };
+
+  const bahWithoutDependents = {
+    E1: 3300,
+    E2: 3300,
+    E3: 3300,
+    E4: 3300,
+    E5: 3900,
+    E6: 5070,
+    E7: 5000,
+    E8: 5300,
+    E9: 5600,
+
+    W1: 4800,
+    W2: 4900,
+    W3: 5050,
+    W4: 5200,
+    W5: 5400,
+
+    O1: 4000,
+    O2: 4400,
+    O3: 5100,
+    O4: 5400,
+    O5: 5700,
+    O6: 5900,
+    O7: 6100,
+    O8: 6200,
+    O9: 6300,
+    O10: 6400,
+  };
+
+  const basePay = basePayTable[rank] || 0;
+  const bas = 476;
+
+  const bah =
+    dependents === "yes"
+      ? bahWithDependents[rank]
+      : bahWithoutDependents[rank];
 
   const grossMonthlyPay = basePay + bas + bah;
-  
+
   if (req.session.userId) {
     await Budget.findOneAndUpdate(
       { userId: req.session.userId },
@@ -317,8 +389,6 @@ router.post("/pay-calculator", async (req, res) => {
     profile: null,
     result: {
       rank,
-      timeInService,
-      zipCode,
       dependents,
       basePay,
       bas,
@@ -327,7 +397,6 @@ router.post("/pay-calculator", async (req, res) => {
     },
   });
 });
-
 
 
 // Logout 

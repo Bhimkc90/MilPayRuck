@@ -22,33 +22,36 @@
 
     <form action="/pay-calculator" method="POST">
 
-        <input
-            type="text"
-            name="rank"
-            placeholder="Rank Example: E6"
-            value="<%= typeof profile !== 'undefined' && profile ? profile.rank : '' %>"
-            required
-        >
-
-        <br><br>
-
-        <input
-                type="number"
-                name="timeInService"
-                placeholder="Years of Service"
-                value="<%= typeof profile !== 'undefined' && profile ? profile.timeInService : '' %>"
-                required
-            >
-
-        <br><br>
-
-        <input
-            type="text"
-            name="zipCode"
-            placeholder="ZIP Code"
-            value="<%= typeof profile !== 'undefined' && profile ? profile.zipCode : '' %>"
-            required
-        >
+        <select name="rank" required>
+            <option value="">Select Rank</option>
+        
+            <option value="E1">E1</option>
+            <option value="E2">E2</option>
+            <option value="E3">E3</option>
+            <option value="E4">E4</option>
+            <option value="E5">E5</option>
+            <option value="E6">E6</option>
+            <option value="E7">E7</option>
+            <option value="E8">E8</option>
+            <option value="E9">E9</option>
+        
+            <option value="W1">W1</option>
+            <option value="W2">W2</option>
+            <option value="W3">W3</option>
+            <option value="W4">W4</option>
+            <option value="W5">W5</option>
+        
+            <option value="O1">O1</option>
+            <option value="O2">O2</option>
+            <option value="O3">O3</option>
+            <option value="O4">O4</option>
+            <option value="O5">O5</option>
+            <option value="O6">O6</option>
+            <option value="O7">O7</option>
+            <option value="O8">O8</option>
+            <option value="O9">O9</option>
+            <option value="O10">O10</option>
+        </select>
 
         <br><br>
 
