@@ -9,6 +9,9 @@ const {
   loginUser,
 } = require("../controllers/authController");
 
+
+
+//Register Page
 router.get("/register", (req, res) => {
   const userType = req.query.type || "military";
 
@@ -17,13 +20,15 @@ router.get("/register", (req, res) => {
   });
 });
 
+
+//login Page
 router.get("/login", (req, res) => {
   res.render("auth/login");
 });
 
 
 
-
+// Dashboard
 router.get("/dashboard", async (req, res) => {
   const userId = req.session.userId;
 
@@ -60,6 +65,8 @@ router.get("/dashboard", async (req, res) => {
 });
 
 
+
+//Profile
 router.get("/profile", async (req, res) => {
   const userId = req.session.userId;
 
@@ -72,7 +79,46 @@ router.get("/profile", async (req, res) => {
 
 
 
+router.get("/edit-profile", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
 
+  const profile = await Profile.findOne({
+    userId: req.session.userId,
+  }).lean();
+
+  res.render("profile/editProfile", {
+    profile,
+  });
+});
+
+router.post("/edit-profile", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+
+  await Profile.findOneAndUpdate(
+    { userId: req.session.userId },
+    {
+      userId: req.session.userId,
+      userType: "military",
+      rank: req.body.rank,
+      timeInService: req.body.timeInService,
+      zipCode: req.body.zipCode,
+      dependents: req.body.dependents,
+      dutyLocation: req.body.dutyLocation,
+    },
+    { upsert: true, new: true }
+  );
+
+  res.redirect("/profile");
+});
+
+
+
+
+//Budget
 router.get("/budget", async (req, res) => {
   const userId = req.session.userId;
 
@@ -92,7 +138,49 @@ router.get("/budget", async (req, res) => {
 });
 
 
+router.post("/edit-budget", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
 
+  await Budget.findOneAndUpdate(
+    { userId: req.session.userId },
+    {
+      userId: req.session.userId,
+      monthlyNetIncome: req.body.monthlyNetIncome,
+      expenses: {
+        rentMortgage: req.body.rentMortgage || 0,
+        utilities: req.body.utilities || 0,
+        groceries: req.body.groceries || 0,
+        autoPayment: req.body.autoPayment || 0,
+        savings: req.body.savings || 0,
+        investments: req.body.investments || 0,
+      },
+    },
+    { upsert: true, new: true }
+  );
+
+  res.redirect("/budget");
+});
+
+
+router.get("/edit-budget", async (req, res) => {
+  if (!req.session.userId) {
+    return res.redirect("/login");
+  }
+
+  const budget = await Budget.findOne({
+    userId: req.session.userId,
+  }).lean();
+
+  res.render("budget/editBudget", {
+    budget,
+  });
+});
+
+
+
+//Transactions
 router.get("/transactions", async (req, res) => {
   const userId = req.session.userId;
 
@@ -166,7 +254,11 @@ router.post("/edit-transaction/:id", async (req, res) => {
 
 
 
-router.get("/edit-profile", async (req, res) => {
+
+
+//Pay Calculator
+
+router.get("/pay-calculator", async (req, res) => {
   if (!req.session.userId) {
     return res.redirect("/login");
   }
@@ -175,36 +267,70 @@ router.get("/edit-profile", async (req, res) => {
     userId: req.session.userId,
   }).lean();
 
-  res.render("profile/editProfile", {
+  res.render("pay/calculator", {
     profile,
   });
 });
 
-router.post("/edit-profile", async (req, res) => {
-  if (!req.session.userId) {
-    return res.redirect("/login");
+router.post("/pay-calculator", async (req, res) => {
+  const rank = req.body.rank;
+  const timeInService = Number(req.body.timeInService);
+  const zipCode = req.body.zipCode;
+  const dependents = req.body.dependents;
+
+  let basePay = 0;
+
+  if (rank === "E6" && timeInService >= 10) {
+    basePay = 4858;
+  } else if (rank === "E5" && timeInService >= 8) {
+    basePay = 3950;
+  } else {
+    basePay = 3000;
   }
 
-  await Profile.findOneAndUpdate(
-    { userId: req.session.userId },
-    {
-      userId: req.session.userId,
-      userType: "military",
-      rank: req.body.rank,
-      timeInService: req.body.timeInService,
-      zipCode: req.body.zipCode,
-      dependents: req.body.dependents,
-      dutyLocation: req.body.dutyLocation,
-    },
-    { upsert: true, new: true }
-  );
+  const bas = 465;
 
-  res.redirect("/profile");
+  let bah = 0;
+
+  if (zipCode === "11368" && dependents === "yes") {
+    bah = 5097;
+  } else if (zipCode === "11368" && dependents === "no") {
+    bah = 4300;
+  } else {
+    bah = 2500;
+  }
+
+  const grossMonthlyPay = basePay + bas + bah;
+  
+  if (req.session.userId) {
+    await Budget.findOneAndUpdate(
+      { userId: req.session.userId },
+      {
+        userId: req.session.userId,
+        monthlyNetIncome: grossMonthlyPay,
+      },
+      { upsert: true, new: true }
+    );
+  }
+
+  res.render("pay/calculator", {
+    profile: null,
+    result: {
+      rank,
+      timeInService,
+      zipCode,
+      dependents,
+      basePay,
+      bas,
+      bah,
+      grossMonthlyPay,
+    },
+  });
 });
 
 
 
-
+// Logout 
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {
     res.redirect("/login");

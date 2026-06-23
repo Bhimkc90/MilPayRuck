@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pay Calculator - MilPayRuck</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/pay-calculator">Pay Calculator</a>
+    <a href="/logout">Logout</a>
+</nav>
+
+<div class="container">
+
+    <h1>Military Pay Calculator</h1>
+    <p>Estimate monthly military pay based on rank, time in service, ZIP code, and dependency status.</p>
+
+    <form action="/pay-calculator" method="POST">
+
+        <input
+            type="text"
+            name="rank"
+            placeholder="Rank Example: E6"
+            value="<%= typeof profile !== 'undefined' && profile ? profile.rank : '' %>"
+            required
+        >
+
+        <br><br>
+
+        <input
+                type="number"
+                name="timeInService"
+                placeholder="Years of Service"
+                value="<%= typeof profile !== 'undefined' && profile ? profile.timeInService : '' %>"
+                required
+            >
+
+        <br><br>
+
+        <input
+            type="text"
+            name="zipCode"
+            placeholder="ZIP Code"
+            value="<%= typeof profile !== 'undefined' && profile ? profile.zipCode : '' %>"
+            required
+        >
+
+        <br><br>
+
+        <select name="dependents" required>
+            <option value="yes" <%= typeof profile !== 'undefined' && profile && profile.dependents > 0 ? 'selected' : '' %>>
+                With Dependents
+            </option>
+        
+            <option value="no" <%= typeof profile !== 'undefined' && profile && profile.dependents === 0 ? 'selected' : '' %>>
+                Without Dependents
+            </option>
+        </select>
+
+        <br><br>
+
+        <button type="submit">Calculate Pay</button>
+
+    </form>
+
+    <% if (typeof result !== "undefined") { %>
+
+        <hr>
+
+        <h2>Pay Estimate</h2>
+
+        <p><strong>Rank:</strong> <%= result.rank %></p>
+        <p><strong>Years of Service:</strong> <%= result.timeInService %></p>
+        <p><strong>ZIP Code:</strong> <%= result.zipCode %></p>
+        <p><strong>Dependents:</strong> <%= result.dependents %></p>
+
+        <p><strong>Base Pay:</strong> $<%= result.basePay %></p>
+        <p><strong>BAS:</strong> $<%= result.bas %></p>
+        <p><strong>BAH:</strong> $<%= result.bah %></p>
+
+        <h3>Gross Monthly Pay: $<%= result.grossMonthlyPay %></h3>
+
+    <% } %>
+
+</div>
+
+</body>
+</html>

@@ -1,5 +1,3 @@
-<h1>Profile Page</h1>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,11 +9,8 @@
     <nav>
         <a href="/dashboard">Dashboard</a>
         <a href="/profile">Profile</a>
-        <br>
-        <a href="/edit-profile">Edit Profile</a>
         <a href="/budget">Budget</a>
         <a href="/transactions">Transactions</a>
-        
         <a href="/logout">Logout</a>
     </nav>
 
@@ -29,8 +24,12 @@
             <p><strong>ZIP Code:</strong> <%= profile.zipCode %></p>
             <p><strong>Dependents:</strong> <%= profile.dependents %></p>
             <p><strong>Duty Location:</strong> <%= profile.dutyLocation %></p>
+
+            <br>
+            <a href="/edit-profile">Edit Profile</a>
         <% } else { %>
             <p>No profile found.</p>
+            <a href="/edit-profile">Create Profile</a>
         <% } %>
     </div>
 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Budget - MilPayRuck</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/logout">Logout</a>
+</nav>
+
+<div class="container">
+
+    <h1>Edit Budget</h1>
+
+    <form action="/edit-budget" method="POST">
+
+        <input
+            type="number"
+            name="monthlyNetIncome"
+            placeholder="Monthly Net Income"
+            value="<%= budget ? budget.monthlyNetIncome : '' %>"
+            required
+        >
+
+        <br><br>
+
+        <input
+            type="number"
+            name="rentMortgage"
+            placeholder="Rent / Mortgage"
+            value="<%= budget ? budget.expenses.rentMortgage : 0 %>"
+        >
+
+        <br><br>
+
+        <input
+            type="number"
+            name="utilities"
+            placeholder="Utilities"
+            value="<%= budget ? budget.expenses.utilities : 0 %>"
+        >
+
+        <br><br>
+
+        <input
+            type="number"
+            name="groceries"
+            placeholder="Groceries"
+            value="<%= budget ? budget.expenses.groceries : 0 %>"
+        >
+
+        <br><br>
+
+        <input
+            type="number"
+            name="autoPayment"
+            placeholder="Auto Payment"
+            value="<%= budget ? budget.expenses.autoPayment : 0 %>"
+        >
+
+        <br><br>
+
+        <input
+            type="number"
+            name="savings"
+            placeholder="Savings"
+            value="<%= budget ? budget.expenses.savings : 0 %>"
+        >
+
+        <br><br>
+
+        <input
+            type="number"
+            name="investments"
+            placeholder="Investments"
+            value="<%= budget ? budget.expenses.investments : 0 %>"
+        >
+
+        <br><br>
+
+        <button type="submit">
+            Save Budget
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

@@ -14,10 +14,15 @@
         <a href="/logout">Logout</a>
     </nav>
 
+
     <div class="container">
         <h1>Budget</h1>
-        <p>Your monthly income and expenses.</p>
 
+        <p>Your monthly income and expenses.</p>
+        <a href="/edit-budget">Edit Budget</a>
+
+        <br><br>
+    
         <% if (expenses) { %>
 
             <h2>Monthly Net Income: $<%= income %></h2>
