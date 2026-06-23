@@ -6,32 +6,109 @@
 </head>
 <body>
 
-    <nav>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/profile">Profile</a>
-        <a href="/budget">Budget</a>
-        <a href="/transactions">Transactions</a>
-        <a href="/pay-calculator">Pay Calculator</a>
-        <a href="/logout">Logout</a>
-    </nav>
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/pay-calculator">Pay Calculator</a>
+    <a href="/logout">Logout</a>
+</nav>
 
 <div class="container">
     <h1>Edit Profile</h1>
 
     <form action="/edit-profile" method="POST">
-        <input type="text" name="rank" placeholder="Rank" value="<%= profile ? profile.rank : '' %>" required>
+
+        <label>Rank</label><br>
+
+        <select name="rank" required>
+        
+            <optgroup label="Enlisted">
+        
+                <option value="PV1/E1" <%= profile && profile.rank === "PV1/E1" ? "selected" : "" %>>PV1 / E1</option>
+        
+                <option value="PV2/E2" <%= profile && profile.rank === "PV2/E2" ? "selected" : "" %>>PV2 / E2</option>
+        
+                <option value="PFC/E3" <%= profile && profile.rank === "PFC/E3" ? "selected" : "" %>>PFC / E3</option>
+        
+                <option value="SPC/E4" <%= profile && profile.rank === "SPC/E4" ? "selected" : "" %>>SPC / E4</option>
+        
+                <option value="SGT/E5" <%= profile && profile.rank === "SGT/E5" ? "selected" : "" %>>SGT / E5</option>
+        
+                <option value="SSG/E6" <%= profile && profile.rank === "SSG/E6" ? "selected" : "" %>>SSG / E6</option>
+        
+                <option value="SFC/E7" <%= profile && profile.rank === "SFC/E7" ? "selected" : "" %>>SFC / E7</option>
+        
+                <option value="MSG/E8" <%= profile && profile.rank === "MSG/E8" ? "selected" : "" %>>MSG / E8</option>
+        
+                <option value="SGM/E9" <%= profile && profile.rank === "SGM/E9" ? "selected" : "" %>>SGM / E9</option>
+        
+            </optgroup>
+        
+            <optgroup label="Warrant Officer">
+        
+                <option value="WO1/W1" <%= profile && profile.rank === "WO1/W1" ? "selected" : "" %>>WO1 / W1</option>
+        
+                <option value="CW2/W2" <%= profile && profile.rank === "CW2/W2" ? "selected" : "" %>>CW2 / W2</option>
+        
+                <option value="CW3/W3" <%= profile && profile.rank === "CW3/W3" ? "selected" : "" %>>CW3 / W3</option>
+        
+                <option value="CW4/W4" <%= profile && profile.rank === "CW4/W4" ? "selected" : "" %>>CW4 / W4</option>
+        
+                <option value="CW5/W5" <%= profile && profile.rank === "CW5/W5" ? "selected" : "" %>>CW5 / W5</option>
+        
+            </optgroup>
+        
+            <optgroup label="Officer">
+        
+                <option value="2LT/O1" <%= profile && profile.rank === "2LT/O1" ? "selected" : "" %>>2LT / O1</option>
+        
+                <option value="1LT/O2" <%= profile && profile.rank === "1LT/O2" ? "selected" : "" %>>1LT / O2</option>
+        
+                <option value="CPT/O3" <%= profile && profile.rank === "CPT/O3" ? "selected" : "" %>>CPT / O3</option>
+        
+                <option value="MAJ/O4" <%= profile && profile.rank === "MAJ/O4" ? "selected" : "" %>>MAJ / O4</option>
+        
+                <option value="LTC/O5" <%= profile && profile.rank === "LTC/O5" ? "selected" : "" %>>LTC / O5</option>
+        
+                <option value="COL/O6" <%= profile && profile.rank === "COL/O6" ? "selected" : "" %>>COL / O6</option>
+        
+                <option value="BG/O7" <%= profile && profile.rank === "BG/O7" ? "selected" : "" %>>BG / O7</option>
+        
+                <option value="MG/O8" <%= profile && profile.rank === "MG/O8" ? "selected" : "" %>>MG / O8</option>
+        
+                <option value="LTG/O9" <%= profile && profile.rank === "LTG/O9" ? "selected" : "" %>>LTG / O9</option>
+        
+                <option value="GEN/O10" <%= profile && profile.rank === "GEN/O10" ? "selected" : "" %>>GEN / O10</option>
+        
+            </optgroup>
+        
+        </select>
+
         <br><br>
 
-        <input type="number" name="timeInService" placeholder="Time in Service" value="<%= profile ? profile.timeInService : '' %>" required>
+        <label>Time in Service</label><br>
+        <input type="number" name="timeInService" value="<%= profile ? profile.timeInService : '' %>" required>
+
         <br><br>
 
-        <input type="text" name="zipCode" placeholder="ZIP Code" value="<%= profile ? profile.zipCode : '' %>" required>
+        <label>Marital Status</label><br>
+        <select name="maritalStatus" required>
+            <option value="Single" <%= profile && profile.maritalStatus === "Single" ? "selected" : "" %>>Single</option>
+            <option value="Married" <%= profile && profile.maritalStatus === "Married" ? "selected" : "" %>>Married</option>
+        </select>
+
         <br><br>
 
-        <input type="number" name="dependents" placeholder="Dependents" value="<%= profile ? profile.dependents : '' %>" required>
+        <label>Dependents</label><br>
+        <input type="number" name="dependents" value="<%= profile ? profile.dependents : 0 %>" required>
+
         <br><br>
 
-        <input type="text" name="dutyLocation" placeholder="Duty Location" value="<%= profile ? profile.dutyLocation : '' %>" required>
+        <label>Duty Location</label><br>
+        <input type="text" name="dutyLocation" value="<%= profile ? profile.dutyLocation : '' %>" required>
+
         <br><br>
 
         <button type="submit">Save Profile</button>

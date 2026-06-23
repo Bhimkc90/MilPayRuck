@@ -3,50 +3,79 @@
 <head>
     <title>Dashboard - MilPayRuck</title>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <nav>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/profile">Profile</a>
-        <a href="/budget">Budget</a>
-        <a href="/transactions">Transactions</a>
-        <a href="/pay-calculator">Pay Calculator</a>
-        <a href="/logout">Logout</a>
-    </nav>
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/pay-calculator">Pay Calculator</a>
+    <a href="/ai-coach">AI Coach</a>
+    <a href="/logout">Logout</a>
+</nav>
 
-    <div class="container">
-        <h1>
-            Welcome,
-            <%= user.firstName %> <%= user.lastName %>
-        </h1>
-        <h1>Dashboard</h1>
+<div class="container">
+    <h1>
+        Welcome, <%= user.firstName %> <%= user.lastName %>
+    </h1>
+    
+    <p>
+        Military Financial Dashboard
+    </p>
 
-        <div class="dashboard-grid">
+    <div class="card ai-card">
+        <h2>AI Financial Coach</h2>
+        <p><%= aiAdvice %></p>
+    </div>
 
-            <div class="card">
-                <h2>Monthly Net Income</h2>
-                <p>$<%= income %></p>
-            </div>
-
-            <div class="card">
-                <h2>Total Expenses</h2>
-                <p>$<%= totalExpenses %></p>
-            </div>
-
-            <div class="card">
-                <h2>Remaining Cash</h2>
-                <p>$<%= remainingCash %></p>
-            </div>
-
-            <div class="card">
-                <h2>Savings Rate</h2>
-                <p><%= savingsRate %>%</p>
-            </div>
-
+    <div class="dashboard-grid">
+        <div class="card">
+            <h2>Total Income</h2>
+            <p>$<%= income %></p>
         </div>
 
+        <div class="card">
+            <h2>Total Expenses</h2>
+            <p>$<%= totalExpenses %></p>
+        </div>
+
+        <div class="card">
+            <h2>Remaining Cash</h2>
+            <p>$<%= remainingCash %></p>
+        </div>
+
+        <div class="card">
+            <h2>Savings Rate</h2>
+            <p><%= savingsRate %>%</p>
+        </div>
     </div>
+
+    <h2>Income vs Expenses</h2>
+
+    <div class="chart-container">
+        <canvas id="budgetChart"></canvas>
+    </div>
+</div>
+
+<script>
+    const totalExpenses = <%= totalExpenses %>;
+    const remainingCash = <%= remainingCash > 0 ? remainingCash : 0 %>;
+
+    const ctx = document.getElementById("budgetChart");
+
+    new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: ["Expenses", "Remaining Cash"],
+            datasets: [{
+                data: [totalExpenses, remainingCash]
+            }]
+        }
+    });
+</script>
 
 </body>
 </html>

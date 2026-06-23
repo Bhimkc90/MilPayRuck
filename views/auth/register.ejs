@@ -6,7 +6,9 @@
 </head>
 <body>
 
-    <div class="container">
+<div class="container">
+    <div class="auth-container">
+
         <h1>Create Account</h1>
         <p>Register for MilPayRuck</p>
 
@@ -14,67 +16,61 @@
             <input type="hidden" name="userType" value="<%= userType %>">
 
             <input type="text" name="firstName" placeholder="First Name" required>
-            <br><br>
 
             <input type="text" name="lastName" placeholder="Last Name" required>
-            <br><br>
 
             <input type="email" id="email" name="email" placeholder="Email" required>
-            <br><br>
 
             <input type="password" id="password" name="password" placeholder="Password" required>
-            <br><br>
 
             <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
-            <br><br>
 
             <p id="formMessage" style="color: red; font-weight: bold;"></p>
 
             <button type="submit">Register</button>
         </form>
 
-        <p>
+        <p class="auth-link">
             Already have an account?
             <a href="/login">Login</a>
         </p>
+
     </div>
+</div>
 
-    <script>
-        const form = document.getElementById("registerForm");
-        
-        form.addEventListener("submit", function(event) {
-            const email = document.getElementById("email").value.trim();
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirmPassword").value;
-            const message = document.getElementById("formMessage");
+<script>
+    const form = document.getElementById("registerForm");
 
-            message.style.color = "red";
+    form.addEventListener("submit", function(event) {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const message = document.getElementById("formMessage");
 
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{10,}$/;
+        message.style.color = "red";
 
-            if (!emailPattern.test(email)) {
-                event.preventDefault();
-                message.textContent = "Please enter a valid email address.";
-                return;
-            }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{10,}$/;
 
-            if (!passwordPattern.test(password)) {
-                event.preventDefault();
-                message.textContent = "Password must be at least 10 characters and include uppercase, lowercase, number, and special character.";
-                return;
-            }
+        if (!emailPattern.test(email)) {
+            event.preventDefault();
+            message.textContent = "Please enter a valid email address.";
+            return;
+        }
 
-            if (password !== confirmPassword) {
-                event.preventDefault();
-                message.textContent = "Passwords do not match. Please re-enter your password.";
-                return;
-            }
+        if (!passwordPattern.test(password)) {
+            event.preventDefault();
+            message.textContent = "Password must be at least 10 characters and include uppercase, lowercase, number, and special character.";
+            return;
+        }
 
-            message.style.color = "green";
-            message.textContent = "Validation passed.";
-        });
-    </script>
+        if (password !== confirmPassword) {
+            event.preventDefault();
+            message.textContent = "Passwords do not match.";
+            return;
+        }
+    });
+</script>
 
 </body>
 </html>

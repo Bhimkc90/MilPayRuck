@@ -6,91 +6,126 @@
 </head>
 <body>
 
-    <nav>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/profile">Profile</a>
-        <a href="/budget">Budget</a>
-        <a href="/transactions">Transactions</a>
-        <a href="/pay-calculator">Pay Calculator</a>
-        <a href="/logout">Logout</a>
-    </nav>
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/pay-calculator">Pay Calculator</a>
+    <a href="/logout">Logout</a>
+</nav>
 
 <div class="container">
-
     <h1>Edit Budget</h1>
+
+    <p>
+        Enter planned monthly budget amounts. Actual income and expenses are also tracked through transactions.
+    </p>
 
     <form action="/edit-budget" method="POST">
 
+        <label>Monthly Income</label><br>
         <input
             type="number"
             name="monthlyNetIncome"
-            placeholder="Monthly Net Income"
-            value="<%= budget ? budget.monthlyNetIncome : '' %>"
+            value="<%= budget ? budget.monthlyNetIncome : 0 %>"
             required
         >
 
         <br><br>
 
+        <label>Rent / Mortgage</label><br>
         <input
             type="number"
             name="rentMortgage"
-            placeholder="Rent / Mortgage"
-            value="<%= budget ? budget.expenses.rentMortgage : 0 %>"
+            value="<%= budget && budget.expenses ? budget.expenses.rentMortgage || 0 : 0 %>"
         >
 
         <br><br>
 
+        <label>Utilities</label><br>
         <input
             type="number"
             name="utilities"
-            placeholder="Utilities"
-            value="<%= budget ? budget.expenses.utilities : 0 %>"
+            value="<%= budget && budget.expenses ? budget.expenses.utilities || 0 : 0 %>"
         >
 
         <br><br>
 
+        <label>Transportation</label><br>
+        <input
+            type="number"
+            name="transportation"
+            value="<%= budget && budget.expenses ? budget.expenses.transportation || 0 : 0 %>"
+        >
+
+        <br><br>
+
+        <label>Groceries</label><br>
         <input
             type="number"
             name="groceries"
-            placeholder="Groceries"
-            value="<%= budget ? budget.expenses.groceries : 0 %>"
+            value="<%= budget && budget.expenses ? budget.expenses.groceries || 0 : 0 %>"
         >
 
         <br><br>
 
+        <label>Dining Out</label><br>
         <input
             type="number"
-            name="autoPayment"
-            placeholder="Auto Payment"
-            value="<%= budget ? budget.expenses.autoPayment : 0 %>"
+            name="diningOut"
+            value="<%= budget && budget.expenses ? budget.expenses.diningOut || 0 : 0 %>"
         >
 
         <br><br>
 
+        <label>Insurance</label><br>
+        <input
+            type="number"
+            name="insurance"
+            value="<%= budget && budget.expenses ? budget.expenses.insurance || 0 : 0 %>"
+        >
+
+        <br><br>
+
+        <label>Savings</label><br>
         <input
             type="number"
             name="savings"
-            placeholder="Savings"
-            value="<%= budget ? budget.expenses.savings : 0 %>"
+            value="<%= budget && budget.expenses ? budget.expenses.savings || 0 : 0 %>"
         >
 
         <br><br>
 
+        <label>Investments</label><br>
         <input
             type="number"
             name="investments"
-            placeholder="Investments"
-            value="<%= budget ? budget.expenses.investments : 0 %>"
+            value="<%= budget && budget.expenses ? budget.expenses.investments || 0 : 0 %>"
         >
 
         <br><br>
 
-        <button type="submit">
-            Save Budget
-        </button>
+        <label>Entertainment</label><br>
+        <input
+            type="number"
+            name="entertainment"
+            value="<%= budget && budget.expenses ? budget.expenses.entertainment || 0 : 0 %>"
+        >
 
+        <br><br>
+
+        <label>Miscellaneous</label><br>
+        <input
+            type="number"
+            name="miscellaneous"
+            value="<%= budget && budget.expenses ? budget.expenses.miscellaneous || 0 : 0 %>"
+        >
+
+        <br><br>
+
+        <button type="submit">Save Budget</button>
     </form>
-
 </div>
 
 </body>

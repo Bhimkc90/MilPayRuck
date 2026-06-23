@@ -6,51 +6,86 @@
 </head>
 <body>
 
-    <nav>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/profile">Profile</a>
-        <a href="/budget">Budget</a>
-        <a href="/transactions">Transactions</a>
-        <a href="/pay-calculator">Pay Calculator</a>
-        <a href="/logout">Logout</a>
-    </nav>
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/pay-calculator">Pay Calculator</a>
+    <a href="/logout">Logout</a>
+</nav>
 
+<div class="container">
+    <h1>Budget</h1>
 
-    <div class="container">
-        <h1>Budget</h1>
+    <a href="/edit-budget">Edit Budget</a>
 
-        <p>Your monthly income and expenses.</p>
-        <a href="/edit-budget">Edit Budget</a>
+    <br><br>
 
-        <br><br>
-    
-        <% if (expenses) { %>
+    <p><strong>Monthly Income:</strong> $<%= income %></p>
 
-            <h2>Monthly Net Income: $<%= income %></h2>
+    <% if (expenses) { %>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+            </tr>
 
-            <table border="1" cellpadding="10">
-                <tr>
-                    <th>Category</th>
-                    <th>Amount</th>
-                </tr>
+            <tr>
+                <td>Rent / Mortgage</td>
+                <td>$<%= expenses.rentMortgage || 0 %></td>
+            </tr>
 
-                <% for (let category in expenses) { %>
-                    <% if (expenses[category] > 0) { %>
-                        <tr>
-                            <td><%= category %></td>
-                            <td>$<%= expenses[category] %></td>
-                        </tr>
-                    <% } %>
-                <% } %>
-            </table>
+            <tr>
+                <td>Utilities</td>
+                <td>$<%= expenses.utilities || 0 %></td>
+            </tr>
 
-        <% } else { %>
+            <tr>
+                <td>Transportation</td>
+                <td>$<%= expenses.transportation || 0 %></td>
+            </tr>
 
-            <p>No budget found.</p>
+            <tr>
+                <td>Groceries</td>
+                <td>$<%= expenses.groceries || 0 %></td>
+            </tr>
 
-        <% } %>
+            <tr>
+                <td>Dining Out</td>
+                <td>$<%= expenses.diningOut || 0 %></td>
+            </tr>
 
-    </div>
+            <tr>
+                <td>Insurance</td>
+                <td>$<%= expenses.insurance || 0 %></td>
+            </tr>
+
+            <tr>
+                <td>Savings</td>
+                <td>$<%= expenses.savings || 0 %></td>
+            </tr>
+
+            <tr>
+                <td>Investments</td>
+                <td>$<%= expenses.investments || 0 %></td>
+            </tr>
+
+            <tr>
+                <td>Entertainment</td>
+                <td>$<%= expenses.entertainment || 0 %></td>
+            </tr>
+
+            <tr>
+                <td>Miscellaneous</td>
+                <td>$<%= expenses.miscellaneous || 0 %></td>
+            </tr>
+        </table>
+    <% } else { %>
+        <p>No budget found.</p>
+        <a href="/edit-budget">Create Budget</a>
+    <% } %>
+</div>
 
 </body>
 </html>

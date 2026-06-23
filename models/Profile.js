@@ -10,22 +10,33 @@ const profileSchema = new mongoose.Schema(
 
     userType: {
       type: String,
-      enum: ["military", "non-military"],
+      default: "military",
+    },
+
+    rank: {
+      type: String,
       required: true,
     },
 
-    // Military Fields
-    rank: String,
-    timeInService: Number,
-    zipCode: String,
-    dependents: Number,
-    dutyLocation: String,
+    timeInService: {
+      type: Number,
+      required: true,
+    },
 
-    // Civilian Fields
-    companyName: String,
-    jobTitle: String,
-    salary: Number,
-    payFrequency: String,
+    maritalStatus: {
+      type: String,
+      default: "Single",
+    },
+
+    dependents: {
+      type: Number,
+      default: 0,
+    },
+
+    dutyLocation: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

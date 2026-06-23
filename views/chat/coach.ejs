@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Financial Coach - MilPayRuck</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/pay-calculator">Pay Calculator</a>
+    <a href="/ai-coach">AI Coach</a>
+    <a href="/logout">Logout</a>
+</nav>
+
+<div class="container">
+    <h1>AI Financial Coach</h1>
+
+    <div class="chat-box">
+        <% if (chatHistory && chatHistory.length > 0) { %>
+            <% chatHistory.forEach(chat => { %>
+                <div class="chat-message user-message">
+                    <strong>You:</strong>
+                    <p><%= chat.question %></p>
+                </div>
+
+                <div class="chat-message ai-message">
+                    <strong>AI Coach:</strong>
+                    <p><%= chat.answer %></p>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>Ask a question like: How much should I save monthly to have $12,000 by the end of the year?</p>
+        <% } %>
+    </div>
+
+    <form action="/ai-coach" method="POST">
+        <textarea name="question" rows="4" placeholder="Ask your financial question..." required></textarea>
+        <br><br>
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+</body>
+</html>

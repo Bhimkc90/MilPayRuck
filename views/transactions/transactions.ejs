@@ -39,21 +39,17 @@
                     <td><%= transaction.transactionDate.toDateString() %></td>
 
                     <td>
-
-                        <a href="/edit-transaction/<%= transaction._id %>">
-                            Edit
-                        </a>
+                        <div class="action-buttons">
+                            <a class="btn btn-edit" href="/edit-transaction/<%= transaction._id %>">
+                                Edit
+                            </a>
                     
-                        <form
-                            action="/delete-transaction/<%= transaction._id %>"
-                            method="POST"
-                            style="display:inline;"
-                        >
-                            <button type="submit">
-                                Delete
-                            </button>
-                        </form>
-                    
+                            <form action="/delete-transaction/<%= transaction._id %>" method="POST">
+                                <button class="btn btn-delete" type="submit">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
             <% }) %>
