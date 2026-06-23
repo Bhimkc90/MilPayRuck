@@ -11,43 +11,36 @@
         <a href="/profile">Profile</a>
         <a href="/budget">Budget</a>
         <a href="/transactions">Transactions</a>
-        <a href="/logout">Logout</a>
     </nav>
 
     <div class="container">
+
         <h1>MilPayRuck Dashboard</h1>
-        <p>Welcome to your financial command center.</p>
 
         <div class="dashboard-grid">
+
             <div class="card">
                 <h2>Monthly Net Income</h2>
-                <p>$14,000</p>
+                <p>$<%= income %></p>
             </div>
 
             <div class="card">
                 <h2>Total Expenses</h2>
-                <p>$7,300</p>
+                <p>$<%= totalExpenses %></p>
             </div>
 
             <div class="card">
                 <h2>Remaining Cash</h2>
-                <p>$6,700</p>
+                <p>$<%= remainingCash %></p>
             </div>
 
             <div class="card">
                 <h2>Savings Rate</h2>
-                <p>21.4%</p>
+                <p><%= savingsRate %>%</p>
             </div>
+
         </div>
 
-        <h2>Quick Links</h2>
-
-        <div class="buttons">
-            <button>Profile</button>
-            <button>Budget</button>
-            <button>Transactions</button>
-            <button>Pay Calculator</button>
-        </div>
     </div>
 
 </body>

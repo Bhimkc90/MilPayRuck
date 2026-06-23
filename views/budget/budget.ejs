@@ -1,1 +1,49 @@
-<h1>Budget Page</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Budget - MilPayRuck</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/profile">Profile</a>
+        <a href="/budget">Budget</a>
+        <a href="/transactions">Transactions</a>
+    </nav>
+
+    <div class="container">
+        <h1>Budget</h1>
+        <p>Your monthly income and expenses.</p>
+
+        <% if (expenses) { %>
+
+            <h2>Monthly Net Income: $<%= income %></h2>
+
+            <table border="1" cellpadding="10">
+                <tr>
+                    <th>Category</th>
+                    <th>Amount</th>
+                </tr>
+
+                <% for (let category in expenses) { %>
+                    <% if (expenses[category] > 0) { %>
+                        <tr>
+                            <td><%= category %></td>
+                            <td>$<%= expenses[category] %></td>
+                        </tr>
+                    <% } %>
+                <% } %>
+            </table>
+
+        <% } else { %>
+
+            <p>No budget found.</p>
+
+        <% } %>
+
+    </div>
+
+</body>
+</html>
