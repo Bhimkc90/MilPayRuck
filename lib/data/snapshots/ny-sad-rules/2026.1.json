@@ -1,0 +1,67 @@
+{
+  "datasetId": "ny-sad-rules",
+  "version": "2026.1",
+  "taxYear": 2026,
+  "effectiveFrom": "2026-01-01",
+  "effectiveTo": "2026-12-31",
+  "sources": [
+    {
+      "title": "N.Y. Military Law sec. 210, Pay and allowances (most recent revision 2014-09-22)",
+      "publisher": "New York State Senate, Open Legislation",
+      "url": "https://www.nysenate.gov/legislation/laws/MIL/210",
+      "publicationDate": "2014-09-22 (revision in effect)",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Browser page text"
+    },
+    {
+      "title": "N.Y. Military Law sec. 6, Ordering organized militia into active state service",
+      "publisher": "New York State Senate, Open Legislation",
+      "url": "https://www.nysenate.gov/legislation/laws/MIL/6",
+      "publicationDate": "2014-09-22 (revision in effect)",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Browser page text"
+    },
+    {
+      "title": "New York National Guard / Division of Military and Naval Affairs 2025 Annual Report",
+      "publisher": "NYS Division of Military and Naval Affairs (DMNA)",
+      "url": "https://dmna.ny.gov/annual/NYNG_annual_report_2025.pdf",
+      "publicationDate": "2026",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "8e66e526b4704ea4136f44b50cabcfd1608c6f64bd968de588ffffeb715f97ab",
+      "usedFor": "Existence and amount of the $2,000 special duty bonus for personnel working in the prisons"
+    }
+  ],
+  "validation": {
+    "status": "validated",
+    "validatedAt": "2026-10-22",
+    "checks": ["Statutory minimum and bonus wording transcribed from the sources above; values are constants checked by tests."]
+  },
+  "data": {
+    "sadDailyMinimum": 125,
+    "sadPayRule": "Military Law sec. 210(1): for each day or part thereof of state active duty ordered under secs. 6 and 7, the same pay and allowances as members of the U.S. armed forces of corresponding grade, rating and length of service, or $125 per day, whichever is greater.",
+    "federalEquivalentDailyConversion": "Monthly federal rate / 30 per day. DMNA's actual daily conversion method was not published in the sources retrieved; treated as an assumption.",
+    "ordersAuthorityForNySubtraction": "NY subtraction S-126 covers SAD orders issued under Military Law sec. 6.1 (governor's order for invasion, disaster, insurrection, riot, breach of the peace, or imminent danger).",
+    "specialDutyBonus": {
+      "reportedAmount": 2000,
+      "reportedFrequencyDays": 14,
+      "officialWording": "State government officials committed to providing military personnel working in the prisons with a $2,000 special duty bonus every two weeks, on top of their regular state active duty pay and allowances.",
+      "officialSource": "DMNA 2025 Annual Report (Support to the Department of Corrections and Community Supervision; Task Force Sentinel)",
+      "verified": {
+        "existenceAndAmount": "Corroborated by DMNA 2025 Annual Report for personnel working in the prisons (Task Force Sentinel). Not a universal SAD benefit.",
+        "eligibility": "Partially verified: 'military personnel working in the prisons'. Individual eligibility depends on orders and assignment; not verifiable here.",
+        "effectiveDates": "Not verified. The report places the commitment around the transition to a volunteer force by April 1, 2025, and says 2,939 personnel were still on duty on December 31, 2025. No start or end date and no payment calendar was found.",
+        "federalIncomeTax": "Not verified. No federal exclusion identified: compensation is gross income unless excluded, IRS Pub 15 treats bonuses as supplemental wages, and Pub 3 excludes state bonus pay only for combat-zone service.",
+        "nyIncomeTax": "Not verified. Whether the bonus is 'income received for active service' under S-126 has not been confirmed by DTF or DMNA.",
+        "localIncomeTax": "Not verified; follows the NY treatment chosen.",
+        "payrollTax": "Not verified; follows the SAD payroll-tax treatment chosen."
+      }
+    },
+    "unresolved": {
+      "sadPayrollTax": "Whether Social Security/Medicare apply to NY SAD pay was not resolved from IRS or DMNA sources (state-employer coverage depends on New York's Section 218 agreement and 26 U.S.C. 3121(b)(7)). Needs: DMNA/OSC payroll guidance or the member's SAD pay statement.",
+      "sadAllowancesFederalTax": "26 U.S.C. 134 / Pub 3 exclude BAH and BAS paid to members of the uniformed services. Whether state-paid SAD allowances qualify was not confirmed. Needs: IRS guidance or DMNA W-2 treatment.",
+      "sadPaySchedule": "DMNA/OSC SAD payroll calendar and lag were not found. Needs: DMNA payroll calendar or the member's pay statements.",
+      "sadAllowanceRate": "Which BAH rate (locality vs. reserve-component/transient) DMNA pays on SAD was not confirmed."
+    }
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "datasetId": "ny-income-tax",
+  "version": "2026.1",
+  "taxYear": 2026,
+  "effectiveFrom": "2026-01-01",
+  "effectiveTo": "2026-12-31",
+  "sources": [
+    {
+      "title": "IT-2105-I (2026), Instructions for Estimated Income Tax Payment Voucher for Individuals",
+      "publisher": "New York State Department of Taxation and Finance",
+      "url": "https://www.tax.ny.gov/pdf/current_forms/it/it2105i.pdf",
+      "publicationDate": "2026 edition",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "c5476fba20126277bb3556def5655293b3dfa42f7d8ee04c92732b51bbf1823f",
+      "usedFor": "2026 NYS and NYC tax rate schedules, NYS standard deductions, $1,000 dependent exemption, tax computation worksheets 1-16 (supplemental tax / benefit recapture), NYC school tax credit, Yonkers 16.75% surcharge"
+    },
+    {
+      "title": "IT-225-I (2025), Instructions for Form IT-225, New York State Modifications",
+      "publisher": "New York State Department of Taxation and Finance",
+      "url": "https://www.tax.ny.gov/pdf/current_forms/it/it225i.pdf",
+      "publicationDate": "2025 edition",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "4a2de3cfa181bb29fc61a47065b1766334bd4c7ca5940f9777c64c2a5936cb67",
+      "usedFor": "S-118 military combat pay, S-119 military pay of nonresidents, S-126 New York State organized militia income. The 2026 edition was not yet published at retrieval, so these 2025 instructions are carried forward and flagged."
+    },
+    {
+      "title": "IT-201-I (2025), Instructions for Form IT-201 (resident definitions, Group A/B, members of the armed forces)",
+      "publisher": "New York State Department of Taxation and Finance",
+      "url": "https://www.tax.ny.gov/pdf/current_forms/it/it201i.pdf",
+      "publicationDate": "2025 edition",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "29489d6eed7529bc1388e57a5bf0814e6e6d94d02288c5c83a377d21e3773f72"
+    },
+    {
+      "title": "NYS-50-T-Y (1/26), Yonkers Withholding Tax Tables and Methods (Method VIII annual exclusion schedule)",
+      "publisher": "New York State Department of Taxation and Finance",
+      "url": "https://www.tax.ny.gov/pdf/publications/withholding/nys50_t_y.pdf",
+      "publicationDate": "2026-01",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "2fb609e46fbd1a7cc481b85558f0c3543aa7c982b6ac4c4402320234d6307858"
+    },
+    {
+      "title": "50 U.S.C. 4001 (Servicemembers Civil Relief Act sec. 511), subsections (b) and (g)(3)",
+      "publisher": "U.S. Code (via Legal Information Institute)",
+      "url": "https://www.law.cornell.edu/uscode/text/50/4001",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Web fetch",
+      "usedFor": "Military compensation of a non-domiciliary is not income from sources in a state or political subdivision where the member serves."
+    }
+  ],
+  "validation": {
+    "status": "validated",
+    "validatedAt": "2026-10-22",
+    "checks": [
+      "Each published base amount is within $1 of the cumulative tax at its threshold.",
+      "Every recapture-base and incremental-benefit amount in worksheets 2-15 is within $1 of the amount derived from the rate schedule.",
+      "Recapture amounts chain: each worksheet's recapture base equals the previous worksheet's base plus its incremental benefit."
+    ]
+  },
+  "data": {
+    "statusMap": { "single": "single", "mfs": "single", "mfj": "mfj", "qss": "mfj", "hoh": "hoh" },
+    "nys": {
+      "standardDeduction": { "single": 8000, "singleDependent": 3100, "mfj": 16050, "mfs": 8000, "hoh": 11200, "qss": 16050 },
+      "dependentExemption": 1000,
+      "schedules": {
+        "mfj": { "thresholds": [0, 17150, 23600, 27900, 161550, 323200, 2155350, 5000000, 25000000], "rates": [0.039, 0.044, 0.0515, 0.054, 0.059, 0.0685, 0.0965, 0.103, 0.109], "publishedBase": [0, 669, 953, 1174, 8391, 17928, 143430, 417939, 2477939] },
+        "single": { "thresholds": [0, 8500, 11700, 13900, 80650, 215400, 1077550, 5000000, 25000000], "rates": [0.039, 0.044, 0.0515, 0.054, 0.059, 0.0685, 0.0965, 0.103, 0.109], "publishedBase": [0, 332, 473, 586, 4191, 12141, 71198, 449714, 2509714] },
+        "hoh": { "thresholds": [0, 12800, 17650, 20900, 107650, 269300, 1616450, 5000000, 25000000], "rates": [0.039, 0.044, 0.0515, 0.054, 0.059, 0.0685, 0.0965, 0.103, 0.109], "publishedBase": [0, 499, 712, 879, 5564, 15101, 107381, 433894, 2493894] }
+      },
+      "recapture": {
+        "appliesAboveNyagi": 107650,
+        "phaseWidth": 50000,
+        "flatRateAllIncomeAboveNyagi": 25000000,
+        "flatRateAllIncome": 0.109,
+        "maxNyagiForWorksheets": 25000000,
+        "worksheets": {
+          "mfj": {
+            "first": { "worksheet": 1, "maxTaxableIncome": 161550, "flatRate": 0.054 },
+            "later": [
+              { "worksheet": 2, "taxableIncomeOver": 161550, "maxTaxableIncome": 323200, "recaptureBase": 333, "incrementalBenefit": 807 },
+              { "worksheet": 3, "taxableIncomeOver": 323200, "maxTaxableIncome": 2155350, "recaptureBase": 1140, "incrementalBenefit": 3071 },
+              { "worksheet": 4, "taxableIncomeOver": 2155350, "maxTaxableIncome": 5000000, "recaptureBase": 4211, "incrementalBenefit": 60350 },
+              { "worksheet": 5, "taxableIncomeOver": 5000000, "maxTaxableIncome": 25000000, "recaptureBase": 64561, "incrementalBenefit": 32500 }
+            ]
+          },
+          "single": {
+            "first": { "worksheet": 7, "maxTaxableIncome": 215400, "flatRate": 0.059 },
+            "later": [
+              { "worksheet": 8, "taxableIncomeOver": 215400, "maxTaxableIncome": 1077550, "recaptureBase": 567, "incrementalBenefit": 2047 },
+              { "worksheet": 9, "taxableIncomeOver": 1077550, "maxTaxableIncome": 5000000, "recaptureBase": 2614, "incrementalBenefit": 30172 },
+              { "worksheet": 10, "taxableIncomeOver": 5000000, "maxTaxableIncome": 25000000, "recaptureBase": 32786, "incrementalBenefit": 32500 }
+            ]
+          },
+          "hoh": {
+            "first": { "worksheet": 12, "maxTaxableIncome": 269300, "flatRate": 0.059 },
+            "later": [
+              { "worksheet": 13, "taxableIncomeOver": 269300, "maxTaxableIncome": 1616450, "recaptureBase": 787, "incrementalBenefit": 2559 },
+              { "worksheet": 14, "taxableIncomeOver": 1616450, "maxTaxableIncome": 5000000, "recaptureBase": 3346, "incrementalBenefit": 45260 },
+              { "worksheet": 15, "taxableIncomeOver": 5000000, "maxTaxableIncome": 25000000, "recaptureBase": 48606, "incrementalBenefit": 32500 }
+            ]
+          }
+        },
+        "phaseFractionRounding": "Divide by $50,000 and round to the fourth decimal place (IT-2105-I worksheets)."
+      },
+      "subtractions": {
+        "S-118": "Military pay included in federal income received for active service in a designated combat zone (not modeled: combat-zone pay is excluded federally in this tool's scope, so no input is collected).",
+        "S-119": "Military pay received while a nonresident is not subject to New York State tax (SCRA).",
+        "S-126": "Income received while serving in the New York State organized militia (NY Army/Air National Guard, NY Naval Militia, NY Guard) for active service within New York State under state active duty orders issued under Military Law sec. 6.1, or federal active duty orders under Title 10 for service other than training. Excludes regular duties such as drills and annual training.",
+        "S-126-note": "Rule text from IT-225-I (2025). The 2026 instructions were not yet published at retrieval; treated as continuing and flagged in results."
+      },
+      "residency": {
+        "groupA": "Domiciled in NY but nonresident if: no permanent place of abode in NY all year, a permanent place of abode outside NY all year, and 30 days or less in NY.",
+        "statutoryResident": "Permanent place of abode in NY for substantially all the year and 184+ days in NY, unless in active military service.",
+        "militaryNonresident": "Military pay of a member not domiciled in NY is not NY income (S-119; 50 U.S.C. 4001(b))."
+      }
+    },
+    "nyc": {
+      "schedules": {
+        "mfj": { "thresholds": [0, 21600, 45000, 90000], "rates": [0.03078, 0.03762, 0.03819, 0.03876], "publishedBase": [0, 665, 1545, 3264] },
+        "single": { "thresholds": [0, 12000, 25000, 50000], "rates": [0.03078, 0.03762, 0.03819, 0.03876], "publishedBase": [0, 369, 858, 1813] },
+        "hoh": { "thresholds": [0, 14400, 30000, 60000], "rates": [0.03078, 0.03762, 0.03819, 0.03876], "publishedBase": [0, 443, 1030, 2176] }
+      },
+      "residentsOnly": true,
+      "schoolTaxCredit": {
+        "fixed": { "mfj": 125, "others": 63, "maxIncome": 250000, "incomeDefinition": "Federal AGI minus IRA distributions" },
+        "rateReduction": {
+          "maxCityTaxableIncome": 500000,
+          "mfj": { "firstTier": 21600, "firstRate": 0.00171, "base": 37, "secondRate": 0.00228 },
+          "single": { "firstTier": 12000, "firstRate": 0.00171, "base": 21, "secondRate": 0.00228 },
+          "hoh": { "firstTier": 14400, "firstRate": 0.00171, "base": 25, "secondRate": 0.00228 }
+        }
+      },
+      "notModeled": ["NYC household credit", "NYC income tax elimination credit", "NYC child care credit", "NYC earned income credit", "NYC UBT credit"]
+    },
+    "yonkers": {
+      "residentSurchargeRate": 0.1675,
+      "nonresidentEarningsTaxRate": 0.005,
+      "nonresidentExclusions": [
+        { "over": 0, "notOver": 3999.99, "noTax": true },
+        { "over": 3999.99, "notOver": 10000, "exclusion": 3000 },
+        { "over": 10000, "notOver": 20000, "exclusion": 2000 },
+        { "over": 20000, "notOver": 30000, "exclusion": 1000 },
+        { "over": 30000, "notOver": null, "exclusion": 0 }
+      ],
+      "nonresidentLiabilityNote": "Liability estimated with the NYS-50-T-Y Method VIII annual exclusion schedule; Form Y-203 itself was not retrieved."
+    },
+    "notModeled": ["NYS household credit", "Empire State child credit", "NYS earned income credit", "NYS child and dependent care credit", "Itemized deductions (Form IT-196)", "MCTMT (self-employment only)"]
+  }
+}

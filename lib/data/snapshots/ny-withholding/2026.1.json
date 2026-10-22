@@ -1,0 +1,2398 @@
+{
+ "datasetId": "ny-withholding",
+ "version": "2026.1",
+ "taxYear": 2026,
+ "effectiveFrom": "2026-01-01",
+ "effectiveTo": "2026-12-31",
+ "sources": [
+  {
+   "title": "NYS-50-T-NYS (1/26) New York State Withholding Tax Tables and Methods",
+   "publisher": "New York State Department of Taxation and Finance",
+   "url": "https://www.tax.ny.gov/pdf/publications/withholding/nys50_t_nys.pdf",
+   "publicationDate": "2026-01 (revision 1/26)",
+   "retrievedAt": "2026-10-22",
+   "retrievalMethod": "Server download (HTTPS); tables parsed by scripts/extract_ny_withholding.py",
+   "sha256": "e1c2b3440572a10019efe8d8e4d727474c55afb37dd5d18a6a73b94463baf3e8"
+  },
+  {
+   "title": "NYS-50-T-NYC (1/26) New York City Withholding Tax Tables and Methods",
+   "publisher": "New York State Department of Taxation and Finance",
+   "url": "https://www.tax.ny.gov/pdf/publications/withholding/nys50_t_nyc.pdf",
+   "publicationDate": "2026-01 (revision 1/26)",
+   "retrievedAt": "2026-10-22",
+   "retrievalMethod": "Server download (HTTPS); tables parsed by scripts/extract_ny_withholding.py",
+   "sha256": "c380ffaf226332451b4f1609cdf0e0e10dfbf9b976d3961e3e23b09da92a2f4c"
+  },
+  {
+   "title": "NYS-50-T-Y (1/26) Yonkers Withholding Tax Tables and Methods",
+   "publisher": "New York State Department of Taxation and Finance",
+   "url": "https://www.tax.ny.gov/pdf/publications/withholding/nys50_t_y.pdf",
+   "publicationDate": "2026-01 (revision 1/26)",
+   "retrievedAt": "2026-10-22",
+   "retrievalMethod": "Server download (HTTPS); tables parsed by scripts/extract_ny_withholding.py",
+   "sha256": "2fb609e46fbd1a7cc481b85558f0c3543aa7c982b6ac4c4402320234d6307858"
+  }
+ ],
+ "validation": {
+  "status": "validated",
+  "validatedAt": "2026-10-22",
+  "checks": [
+   "Parsed Table A allowances are linear in exemptions (deduction + n x exemption).",
+   "Brackets are contiguous (each row starts where the previous row ends) and column 5 equals the accumulated withholding.",
+   "Worked Examples 1-4 printed in NYS-50-T-NYS (single) and NYS-50-T-NYC (single and married) reproduce to the cent."
+  ]
+ },
+ "data": {
+  "method": "Method II exact calculation: net wages = wages - (deduction + exemptions x per-exemption allowance); withholding = column5 + column4 x (net wages - column3). Yonkers resident: the same result x 16.75%.",
+  "supplementalRates": {
+   "nys": 0.117,
+   "nyc": 0.0425,
+   "yonkersResident": 0.0195975,
+   "yonkersNonresident": 0.005
+  },
+  "yonkersResidentFactor": 0.1675,
+  "methodIIINote": "Net wages above the last Method II row require Method III (top income tax rates); not modeled, so withholding is reported as unavailable for that payment.",
+  "nys": {
+   "jurisdiction": "NYS",
+   "revision": "1/26",
+   "effectiveFrom": "January 1, 2026",
+   "effectiveTo": "December 31, 2026",
+   "allowances": {
+    "daily": {
+     "single": {
+      "deduction": 28.45,
+      "perExemption": 3.85
+     },
+     "married": {
+      "deduction": 30.6,
+      "perExemption": 3.85
+     }
+    },
+    "weekly": {
+     "single": {
+      "deduction": 142.3,
+      "perExemption": 19.25
+     },
+     "married": {
+      "deduction": 152.9,
+      "perExemption": 19.25
+     }
+    },
+    "biweekly": {
+     "single": {
+      "deduction": 284.6,
+      "perExemption": 38.5
+     },
+     "married": {
+      "deduction": 305.8,
+      "perExemption": 38.5
+     }
+    },
+    "semimonthly": {
+     "single": {
+      "deduction": 308.35,
+      "perExemption": 41.65
+     },
+     "married": {
+      "deduction": 331.25,
+      "perExemption": 41.65
+     }
+    },
+    "monthly": {
+     "single": {
+      "deduction": 616.7,
+      "perExemption": 83.3
+     },
+     "married": {
+      "deduction": 662.5,
+      "perExemption": 83.3
+     }
+    },
+    "annual": {
+     "single": {
+      "deduction": 7400,
+      "perExemption": 1000
+     },
+     "married": {
+      "deduction": 7950,
+      "perExemption": 1000
+     }
+    }
+   },
+   "exactCalculation": {
+    "single": {
+     "biweekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 327,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 327,
+       "lessThan": 450,
+       "subtract": 327,
+       "rate": 0.044,
+       "add": 12.77
+      },
+      {
+       "atLeast": 450,
+       "lessThan": 535,
+       "subtract": 450,
+       "rate": 0.0515,
+       "add": 18.15
+      },
+      {
+       "atLeast": 535,
+       "lessThan": 3102,
+       "subtract": 535,
+       "rate": 0.054,
+       "add": 22.54
+      },
+      {
+       "atLeast": 3102,
+       "lessThan": 3723,
+       "subtract": 3102,
+       "rate": 0.059,
+       "add": 161.15
+      },
+      {
+       "atLeast": 3723,
+       "lessThan": 4140,
+       "subtract": 3723,
+       "rate": 0.0703,
+       "add": 197.81
+      },
+      {
+       "atLeast": 4140,
+       "lessThan": 6063,
+       "subtract": 4140,
+       "rate": 0.0753,
+       "add": 227.15
+      },
+      {
+       "atLeast": 6063,
+       "lessThan": 8285,
+       "subtract": 6063,
+       "rate": 0.064,
+       "add": 372.04
+      },
+      {
+       "atLeast": 8285,
+       "lessThan": 10208,
+       "subtract": 8285,
+       "rate": 0.1144,
+       "add": 514.19
+      },
+      {
+       "atLeast": 10208,
+       "lessThan": 41444,
+       "subtract": 10208,
+       "rate": 0.0735,
+       "add": 734.27
+      },
+      {
+       "atLeast": 41444,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "daily": [
+      {
+       "atLeast": 0,
+       "lessThan": 33,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 33,
+       "lessThan": 45,
+       "subtract": 33,
+       "rate": 0.044,
+       "add": 1.28
+      },
+      {
+       "atLeast": 45,
+       "lessThan": 53,
+       "subtract": 45,
+       "rate": 0.0515,
+       "add": 1.82
+      },
+      {
+       "atLeast": 53,
+       "lessThan": 310,
+       "subtract": 53,
+       "rate": 0.054,
+       "add": 2.25
+      },
+      {
+       "atLeast": 310,
+       "lessThan": 372,
+       "subtract": 310,
+       "rate": 0.059,
+       "add": 16.12
+      },
+      {
+       "atLeast": 372,
+       "lessThan": 414,
+       "subtract": 372,
+       "rate": 0.0703,
+       "add": 19.78
+      },
+      {
+       "atLeast": 414,
+       "lessThan": 606,
+       "subtract": 414,
+       "rate": 0.0753,
+       "add": 22.72
+      },
+      {
+       "atLeast": 606,
+       "lessThan": 828,
+       "subtract": 606,
+       "rate": 0.064,
+       "add": 37.2
+      },
+      {
+       "atLeast": 828,
+       "lessThan": 1021,
+       "subtract": 828,
+       "rate": 0.1144,
+       "add": 51.42
+      },
+      {
+       "atLeast": 1021,
+       "lessThan": 4144,
+       "subtract": 1021,
+       "rate": 0.0735,
+       "add": 73.43
+      },
+      {
+       "atLeast": 4144,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "semimonthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 354,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 354,
+       "lessThan": 488,
+       "subtract": 354,
+       "rate": 0.044,
+       "add": 13.83
+      },
+      {
+       "atLeast": 488,
+       "lessThan": 579,
+       "subtract": 488,
+       "rate": 0.0515,
+       "add": 19.67
+      },
+      {
+       "atLeast": 579,
+       "lessThan": 3360,
+       "subtract": 579,
+       "rate": 0.054,
+       "add": 24.42
+      },
+      {
+       "atLeast": 3360,
+       "lessThan": 4033,
+       "subtract": 3360,
+       "rate": 0.059,
+       "add": 174.58
+      },
+      {
+       "atLeast": 4033,
+       "lessThan": 4485,
+       "subtract": 4033,
+       "rate": 0.0703,
+       "add": 214.29
+      },
+      {
+       "atLeast": 4485,
+       "lessThan": 6569,
+       "subtract": 4485,
+       "rate": 0.0753,
+       "add": 246.08
+      },
+      {
+       "atLeast": 6569,
+       "lessThan": 8975,
+       "subtract": 6569,
+       "rate": 0.064,
+       "add": 403.04
+      },
+      {
+       "atLeast": 8975,
+       "lessThan": 11058,
+       "subtract": 8975,
+       "rate": 0.1144,
+       "add": 557.04
+      },
+      {
+       "atLeast": 11058,
+       "lessThan": 44898,
+       "subtract": 11058,
+       "rate": 0.0735,
+       "add": 795.46
+      },
+      {
+       "atLeast": 44898,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "weekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 163,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 163,
+       "lessThan": 225,
+       "subtract": 163,
+       "rate": 0.044,
+       "add": 6.38
+      },
+      {
+       "atLeast": 225,
+       "lessThan": 267,
+       "subtract": 225,
+       "rate": 0.0515,
+       "add": 9.08
+      },
+      {
+       "atLeast": 267,
+       "lessThan": 1551,
+       "subtract": 267,
+       "rate": 0.054,
+       "add": 11.27
+      },
+      {
+       "atLeast": 1551,
+       "lessThan": 1862,
+       "subtract": 1551,
+       "rate": 0.059,
+       "add": 80.58
+      },
+      {
+       "atLeast": 1862,
+       "lessThan": 2070,
+       "subtract": 1862,
+       "rate": 0.0703,
+       "add": 98.9
+      },
+      {
+       "atLeast": 2070,
+       "lessThan": 3032,
+       "subtract": 2070,
+       "rate": 0.0753,
+       "add": 113.58
+      },
+      {
+       "atLeast": 3032,
+       "lessThan": 4142,
+       "subtract": 3032,
+       "rate": 0.064,
+       "add": 186.02
+      },
+      {
+       "atLeast": 4142,
+       "lessThan": 5104,
+       "subtract": 4142,
+       "rate": 0.1144,
+       "add": 257.1
+      },
+      {
+       "atLeast": 5104,
+       "lessThan": 20722,
+       "subtract": 5104,
+       "rate": 0.0735,
+       "add": 367.13
+      },
+      {
+       "atLeast": 20722,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "monthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 708,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 708,
+       "lessThan": 975,
+       "subtract": 708,
+       "rate": 0.044,
+       "add": 27.67
+      },
+      {
+       "atLeast": 975,
+       "lessThan": 1158,
+       "subtract": 975,
+       "rate": 0.0515,
+       "add": 39.33
+      },
+      {
+       "atLeast": 1158,
+       "lessThan": 6721,
+       "subtract": 1158,
+       "rate": 0.054,
+       "add": 48.83
+      },
+      {
+       "atLeast": 6721,
+       "lessThan": 8067,
+       "subtract": 6721,
+       "rate": 0.059,
+       "add": 349.17
+      },
+      {
+       "atLeast": 8067,
+       "lessThan": 8971,
+       "subtract": 8067,
+       "rate": 0.0703,
+       "add": 428.58
+      },
+      {
+       "atLeast": 8971,
+       "lessThan": 13138,
+       "subtract": 8971,
+       "rate": 0.0753,
+       "add": 492.17
+      },
+      {
+       "atLeast": 13138,
+       "lessThan": 17950,
+       "subtract": 13138,
+       "rate": 0.064,
+       "add": 806.08
+      },
+      {
+       "atLeast": 17950,
+       "lessThan": 22117,
+       "subtract": 17950,
+       "rate": 0.1144,
+       "add": 1114.08
+      },
+      {
+       "atLeast": 22117,
+       "lessThan": 89796,
+       "subtract": 22117,
+       "rate": 0.0735,
+       "add": 1590.92
+      },
+      {
+       "atLeast": 89796,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ]
+    },
+    "married": {
+     "biweekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 327,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 327,
+       "lessThan": 450,
+       "subtract": 327,
+       "rate": 0.044,
+       "add": 12.77
+      },
+      {
+       "atLeast": 450,
+       "lessThan": 535,
+       "subtract": 450,
+       "rate": 0.0515,
+       "add": 18.15
+      },
+      {
+       "atLeast": 535,
+       "lessThan": 3102,
+       "subtract": 535,
+       "rate": 0.054,
+       "add": 22.54
+      },
+      {
+       "atLeast": 3102,
+       "lessThan": 3723,
+       "subtract": 3102,
+       "rate": 0.059,
+       "add": 161.15
+      },
+      {
+       "atLeast": 3723,
+       "lessThan": 4140,
+       "subtract": 3723,
+       "rate": 0.0657,
+       "add": 197.81
+      },
+      {
+       "atLeast": 4140,
+       "lessThan": 6063,
+       "subtract": 4140,
+       "rate": 0.0707,
+       "add": 225.19
+      },
+      {
+       "atLeast": 6063,
+       "lessThan": 8137,
+       "subtract": 6063,
+       "rate": 0.0801,
+       "add": 361.08
+      },
+      {
+       "atLeast": 8137,
+       "lessThan": 12431,
+       "subtract": 8137,
+       "rate": 0.064,
+       "add": 527.23
+      },
+      {
+       "atLeast": 12431,
+       "lessThan": 14354,
+       "subtract": 12431,
+       "rate": 0.1349,
+       "add": 802.08
+      },
+      {
+       "atLeast": 14354,
+       "lessThan": 41444,
+       "subtract": 14354,
+       "rate": 0.0735,
+       "add": 1061.54
+      },
+      {
+       "atLeast": 41444,
+       "lessThan": 82898,
+       "subtract": 41444,
+       "rate": 0.0765,
+       "add": 3052.65
+      },
+      {
+       "atLeast": 82898,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "daily": [
+      {
+       "atLeast": 0,
+       "lessThan": 33,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 33,
+       "lessThan": 45,
+       "subtract": 33,
+       "rate": 0.044,
+       "add": 1.28
+      },
+      {
+       "atLeast": 45,
+       "lessThan": 53,
+       "subtract": 45,
+       "rate": 0.0515,
+       "add": 1.82
+      },
+      {
+       "atLeast": 53,
+       "lessThan": 310,
+       "subtract": 53,
+       "rate": 0.054,
+       "add": 2.25
+      },
+      {
+       "atLeast": 310,
+       "lessThan": 372,
+       "subtract": 310,
+       "rate": 0.059,
+       "add": 16.12
+      },
+      {
+       "atLeast": 372,
+       "lessThan": 414,
+       "subtract": 372,
+       "rate": 0.0657,
+       "add": 19.78
+      },
+      {
+       "atLeast": 414,
+       "lessThan": 606,
+       "subtract": 414,
+       "rate": 0.0707,
+       "add": 22.52
+      },
+      {
+       "atLeast": 606,
+       "lessThan": 814,
+       "subtract": 606,
+       "rate": 0.0801,
+       "add": 36.11
+      },
+      {
+       "atLeast": 814,
+       "lessThan": 1243,
+       "subtract": 814,
+       "rate": 0.064,
+       "add": 52.72
+      },
+      {
+       "atLeast": 1243,
+       "lessThan": 1435,
+       "subtract": 1243,
+       "rate": 0.1349,
+       "add": 80.21
+      },
+      {
+       "atLeast": 1435,
+       "lessThan": 4144,
+       "subtract": 1435,
+       "rate": 0.0735,
+       "add": 106.15
+      },
+      {
+       "atLeast": 4144,
+       "lessThan": 8290,
+       "subtract": 4144,
+       "rate": 0.0765,
+       "add": 305.27
+      },
+      {
+       "atLeast": 8290,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "semimonthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 354,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 354,
+       "lessThan": 488,
+       "subtract": 354,
+       "rate": 0.044,
+       "add": 13.83
+      },
+      {
+       "atLeast": 488,
+       "lessThan": 579,
+       "subtract": 488,
+       "rate": 0.0515,
+       "add": 19.67
+      },
+      {
+       "atLeast": 579,
+       "lessThan": 3360,
+       "subtract": 579,
+       "rate": 0.054,
+       "add": 24.42
+      },
+      {
+       "atLeast": 3360,
+       "lessThan": 4033,
+       "subtract": 3360,
+       "rate": 0.059,
+       "add": 174.58
+      },
+      {
+       "atLeast": 4033,
+       "lessThan": 4485,
+       "subtract": 4033,
+       "rate": 0.0657,
+       "add": 214.29
+      },
+      {
+       "atLeast": 4485,
+       "lessThan": 6569,
+       "subtract": 4485,
+       "rate": 0.0707,
+       "add": 243.96
+      },
+      {
+       "atLeast": 6569,
+       "lessThan": 8815,
+       "subtract": 6569,
+       "rate": 0.0801,
+       "add": 391.17
+      },
+      {
+       "atLeast": 8815,
+       "lessThan": 13467,
+       "subtract": 8815,
+       "rate": 0.064,
+       "add": 571.17
+      },
+      {
+       "atLeast": 13467,
+       "lessThan": 15550,
+       "subtract": 13467,
+       "rate": 0.1349,
+       "add": 868.92
+      },
+      {
+       "atLeast": 15550,
+       "lessThan": 44898,
+       "subtract": 15550,
+       "rate": 0.0735,
+       "add": 1150
+      },
+      {
+       "atLeast": 44898,
+       "lessThan": 89806,
+       "subtract": 44898,
+       "rate": 0.0765,
+       "add": 3307.04
+      },
+      {
+       "atLeast": 89806,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "weekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 163,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 163,
+       "lessThan": 225,
+       "subtract": 163,
+       "rate": 0.044,
+       "add": 6.38
+      },
+      {
+       "atLeast": 225,
+       "lessThan": 267,
+       "subtract": 225,
+       "rate": 0.0515,
+       "add": 9.08
+      },
+      {
+       "atLeast": 267,
+       "lessThan": 1551,
+       "subtract": 267,
+       "rate": 0.054,
+       "add": 11.27
+      },
+      {
+       "atLeast": 1551,
+       "lessThan": 1862,
+       "subtract": 1551,
+       "rate": 0.059,
+       "add": 80.58
+      },
+      {
+       "atLeast": 1862,
+       "lessThan": 2070,
+       "subtract": 1862,
+       "rate": 0.0657,
+       "add": 98.9
+      },
+      {
+       "atLeast": 2070,
+       "lessThan": 3032,
+       "subtract": 2070,
+       "rate": 0.0707,
+       "add": 112.6
+      },
+      {
+       "atLeast": 3032,
+       "lessThan": 4068,
+       "subtract": 3032,
+       "rate": 0.0801,
+       "add": 180.54
+      },
+      {
+       "atLeast": 4068,
+       "lessThan": 6215,
+       "subtract": 4068,
+       "rate": 0.064,
+       "add": 263.62
+      },
+      {
+       "atLeast": 6215,
+       "lessThan": 7177,
+       "subtract": 6215,
+       "rate": 0.1349,
+       "add": 401.04
+      },
+      {
+       "atLeast": 7177,
+       "lessThan": 20722,
+       "subtract": 7177,
+       "rate": 0.0735,
+       "add": 530.77
+      },
+      {
+       "atLeast": 20722,
+       "lessThan": 41449,
+       "subtract": 20722,
+       "rate": 0.0765,
+       "add": 1526.33
+      },
+      {
+       "atLeast": 41449,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "monthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 708,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 708,
+       "lessThan": 975,
+       "subtract": 708,
+       "rate": 0.044,
+       "add": 27.67
+      },
+      {
+       "atLeast": 975,
+       "lessThan": 1158,
+       "subtract": 975,
+       "rate": 0.0515,
+       "add": 39.33
+      },
+      {
+       "atLeast": 1158,
+       "lessThan": 6721,
+       "subtract": 1158,
+       "rate": 0.054,
+       "add": 48.83
+      },
+      {
+       "atLeast": 6721,
+       "lessThan": 8067,
+       "subtract": 6721,
+       "rate": 0.059,
+       "add": 349.17
+      },
+      {
+       "atLeast": 8067,
+       "lessThan": 8971,
+       "subtract": 8067,
+       "rate": 0.0657,
+       "add": 428.58
+      },
+      {
+       "atLeast": 8971,
+       "lessThan": 13138,
+       "subtract": 8971,
+       "rate": 0.0707,
+       "add": 487.92
+      },
+      {
+       "atLeast": 13138,
+       "lessThan": 17629,
+       "subtract": 13138,
+       "rate": 0.0801,
+       "add": 782.33
+      },
+      {
+       "atLeast": 17629,
+       "lessThan": 26933,
+       "subtract": 17629,
+       "rate": 0.064,
+       "add": 1142.33
+      },
+      {
+       "atLeast": 26933,
+       "lessThan": 31100,
+       "subtract": 26933,
+       "rate": 0.1349,
+       "add": 1737.83
+      },
+      {
+       "atLeast": 31100,
+       "lessThan": 89796,
+       "subtract": 31100,
+       "rate": 0.0735,
+       "add": 2300
+      },
+      {
+       "atLeast": 89796,
+       "lessThan": 179613,
+       "subtract": 89796,
+       "rate": 0.0765,
+       "add": 6614.08
+      },
+      {
+       "atLeast": 179613,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ]
+    }
+   }
+  },
+  "nyc": {
+   "jurisdiction": "NYC",
+   "revision": "1/26",
+   "effectiveFrom": "January 1, 2026",
+   "effectiveTo": "December 31, 2026",
+   "allowances": {
+    "daily": {
+     "single": {
+      "deduction": 19.25,
+      "perExemption": 3.85
+     },
+     "married": {
+      "deduction": 21.15,
+      "perExemption": 3.85
+     }
+    },
+    "weekly": {
+     "single": {
+      "deduction": 96.15,
+      "perExemption": 19.25
+     },
+     "married": {
+      "deduction": 105.75,
+      "perExemption": 19.25
+     }
+    },
+    "biweekly": {
+     "single": {
+      "deduction": 192.3,
+      "perExemption": 38.5
+     },
+     "married": {
+      "deduction": 211.5,
+      "perExemption": 38.5
+     }
+    },
+    "semimonthly": {
+     "single": {
+      "deduction": 208.35,
+      "perExemption": 41.65
+     },
+     "married": {
+      "deduction": 229.15,
+      "perExemption": 41.65
+     }
+    },
+    "monthly": {
+     "single": {
+      "deduction": 416.7,
+      "perExemption": 83.3
+     },
+     "married": {
+      "deduction": 458.3,
+      "perExemption": 83.3
+     }
+    },
+    "annual": {
+     "single": {
+      "deduction": 5000,
+      "perExemption": 1000
+     },
+     "married": {
+      "deduction": 5500,
+      "perExemption": 1000
+     }
+    }
+   },
+   "exactCalculation": {
+    "single": {
+     "weekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 154,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 154,
+       "lessThan": 167,
+       "subtract": 154,
+       "rate": 0.028,
+       "add": 3.15
+      },
+      {
+       "atLeast": 167,
+       "lessThan": 288,
+       "subtract": 167,
+       "rate": 0.0325,
+       "add": 3.54
+      },
+      {
+       "atLeast": 288,
+       "lessThan": 481,
+       "subtract": 288,
+       "rate": 0.0395,
+       "add": 7.46
+      },
+      {
+       "atLeast": 481,
+       "lessThan": 1154,
+       "subtract": 481,
+       "rate": 0.0415,
+       "add": 15.06
+      },
+      {
+       "atLeast": 1154,
+       "lessThan": null,
+       "subtract": 1154,
+       "rate": 0.0425,
+       "add": 43
+      }
+     ],
+     "monthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 667,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 667,
+       "lessThan": 725,
+       "subtract": 667,
+       "rate": 0.028,
+       "add": 13.67
+      },
+      {
+       "atLeast": 725,
+       "lessThan": 1250,
+       "subtract": 725,
+       "rate": 0.0325,
+       "add": 15.33
+      },
+      {
+       "atLeast": 1250,
+       "lessThan": 2083,
+       "subtract": 1250,
+       "rate": 0.0395,
+       "add": 32.33
+      },
+      {
+       "atLeast": 2083,
+       "lessThan": 5000,
+       "subtract": 2083,
+       "rate": 0.0415,
+       "add": 65.25
+      },
+      {
+       "atLeast": 5000,
+       "lessThan": null,
+       "subtract": 5000,
+       "rate": 0.0425,
+       "add": 186.33
+      }
+     ],
+     "biweekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 308,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 308,
+       "lessThan": 334,
+       "subtract": 308,
+       "rate": 0.028,
+       "add": 6.31
+      },
+      {
+       "atLeast": 334,
+       "lessThan": 577,
+       "subtract": 334,
+       "rate": 0.0325,
+       "add": 7.08
+      },
+      {
+       "atLeast": 577,
+       "lessThan": 962,
+       "subtract": 577,
+       "rate": 0.0395,
+       "add": 14.92
+      },
+      {
+       "atLeast": 962,
+       "lessThan": 2308,
+       "subtract": 962,
+       "rate": 0.0415,
+       "add": 30.12
+      },
+      {
+       "atLeast": 2308,
+       "lessThan": null,
+       "subtract": 2308,
+       "rate": 0.0425,
+       "add": 86
+      }
+     ],
+     "daily": [
+      {
+       "atLeast": 0,
+       "lessThan": 31,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 31,
+       "lessThan": 33.5,
+       "subtract": 31,
+       "rate": 0.028,
+       "add": 0.63
+      },
+      {
+       "atLeast": 33.5,
+       "lessThan": 57.5,
+       "subtract": 33.5,
+       "rate": 0.0325,
+       "add": 0.71
+      },
+      {
+       "atLeast": 57.5,
+       "lessThan": 96,
+       "subtract": 57.5,
+       "rate": 0.0395,
+       "add": 1.49
+      },
+      {
+       "atLeast": 96,
+       "lessThan": 231,
+       "subtract": 96,
+       "rate": 0.0415,
+       "add": 3.01
+      },
+      {
+       "atLeast": 231,
+       "lessThan": null,
+       "subtract": 231,
+       "rate": 0.0425,
+       "add": 8.6
+      }
+     ],
+     "semimonthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 333,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 333,
+       "lessThan": 362,
+       "subtract": 333,
+       "rate": 0.028,
+       "add": 6.83
+      },
+      {
+       "atLeast": 362,
+       "lessThan": 625,
+       "subtract": 362,
+       "rate": 0.0325,
+       "add": 7.67
+      },
+      {
+       "atLeast": 625,
+       "lessThan": 1042,
+       "subtract": 625,
+       "rate": 0.0395,
+       "add": 16.17
+      },
+      {
+       "atLeast": 1042,
+       "lessThan": 2500,
+       "subtract": 1042,
+       "rate": 0.0415,
+       "add": 32.63
+      },
+      {
+       "atLeast": 2500,
+       "lessThan": null,
+       "subtract": 2500,
+       "rate": 0.0425,
+       "add": 93.17
+      }
+     ]
+    },
+    "married": {
+     "weekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 154,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 154,
+       "lessThan": 167,
+       "subtract": 154,
+       "rate": 0.028,
+       "add": 3.15
+      },
+      {
+       "atLeast": 167,
+       "lessThan": 288,
+       "subtract": 167,
+       "rate": 0.0325,
+       "add": 3.54
+      },
+      {
+       "atLeast": 288,
+       "lessThan": 481,
+       "subtract": 288,
+       "rate": 0.0395,
+       "add": 7.46
+      },
+      {
+       "atLeast": 481,
+       "lessThan": 1154,
+       "subtract": 481,
+       "rate": 0.0415,
+       "add": 15.06
+      },
+      {
+       "atLeast": 1154,
+       "lessThan": null,
+       "subtract": 1154,
+       "rate": 0.0425,
+       "add": 43
+      }
+     ],
+     "monthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 667,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 667,
+       "lessThan": 725,
+       "subtract": 667,
+       "rate": 0.028,
+       "add": 13.67
+      },
+      {
+       "atLeast": 725,
+       "lessThan": 1250,
+       "subtract": 725,
+       "rate": 0.0325,
+       "add": 15.33
+      },
+      {
+       "atLeast": 1250,
+       "lessThan": 2083,
+       "subtract": 1250,
+       "rate": 0.0395,
+       "add": 32.33
+      },
+      {
+       "atLeast": 2083,
+       "lessThan": 5000,
+       "subtract": 2083,
+       "rate": 0.0415,
+       "add": 65.25
+      },
+      {
+       "atLeast": 5000,
+       "lessThan": null,
+       "subtract": 5000,
+       "rate": 0.0425,
+       "add": 186.33
+      }
+     ],
+     "biweekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 308,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 308,
+       "lessThan": 334,
+       "subtract": 308,
+       "rate": 0.028,
+       "add": 6.31
+      },
+      {
+       "atLeast": 334,
+       "lessThan": 577,
+       "subtract": 334,
+       "rate": 0.0325,
+       "add": 7.08
+      },
+      {
+       "atLeast": 577,
+       "lessThan": 962,
+       "subtract": 577,
+       "rate": 0.0395,
+       "add": 14.92
+      },
+      {
+       "atLeast": 962,
+       "lessThan": 2308,
+       "subtract": 962,
+       "rate": 0.0415,
+       "add": 30.12
+      },
+      {
+       "atLeast": 2308,
+       "lessThan": null,
+       "subtract": 2308,
+       "rate": 0.0425,
+       "add": 86
+      }
+     ],
+     "daily": [
+      {
+       "atLeast": 0,
+       "lessThan": 31,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 31,
+       "lessThan": 33.5,
+       "subtract": 31,
+       "rate": 0.028,
+       "add": 0.63
+      },
+      {
+       "atLeast": 33.5,
+       "lessThan": 57.5,
+       "subtract": 33.5,
+       "rate": 0.0325,
+       "add": 0.71
+      },
+      {
+       "atLeast": 57.5,
+       "lessThan": 96,
+       "subtract": 57.5,
+       "rate": 0.0395,
+       "add": 1.49
+      },
+      {
+       "atLeast": 96,
+       "lessThan": 231,
+       "subtract": 96,
+       "rate": 0.0415,
+       "add": 3.01
+      },
+      {
+       "atLeast": 231,
+       "lessThan": null,
+       "subtract": 231,
+       "rate": 0.0425,
+       "add": 8.6
+      }
+     ],
+     "semimonthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 333,
+       "subtract": 0,
+       "rate": 0.0205,
+       "add": 0
+      },
+      {
+       "atLeast": 333,
+       "lessThan": 362,
+       "subtract": 333,
+       "rate": 0.028,
+       "add": 6.83
+      },
+      {
+       "atLeast": 362,
+       "lessThan": 625,
+       "subtract": 362,
+       "rate": 0.0325,
+       "add": 7.67
+      },
+      {
+       "atLeast": 625,
+       "lessThan": 1042,
+       "subtract": 625,
+       "rate": 0.0395,
+       "add": 16.17
+      },
+      {
+       "atLeast": 1042,
+       "lessThan": 2500,
+       "subtract": 1042,
+       "rate": 0.0415,
+       "add": 32.63
+      },
+      {
+       "atLeast": 2500,
+       "lessThan": null,
+       "subtract": 2500,
+       "rate": 0.0425,
+       "add": 93.17
+      }
+     ]
+    }
+   }
+  },
+  "yonkersResident": {
+   "jurisdiction": "Yonkers resident",
+   "revision": "1/26",
+   "effectiveFrom": "January 1, 2026",
+   "effectiveTo": "December 31, 2026",
+   "allowances": {
+    "daily": {
+     "single": {
+      "deduction": 28.45,
+      "perExemption": 3.85
+     },
+     "married": {
+      "deduction": 30.6,
+      "perExemption": 3.85
+     }
+    },
+    "weekly": {
+     "single": {
+      "deduction": 142.3,
+      "perExemption": 19.25
+     },
+     "married": {
+      "deduction": 152.9,
+      "perExemption": 19.25
+     }
+    },
+    "biweekly": {
+     "single": {
+      "deduction": 284.6,
+      "perExemption": 38.5
+     },
+     "married": {
+      "deduction": 305.8,
+      "perExemption": 38.5
+     }
+    },
+    "semimonthly": {
+     "single": {
+      "deduction": 308.35,
+      "perExemption": 41.65
+     },
+     "married": {
+      "deduction": 331.25,
+      "perExemption": 41.65
+     }
+    },
+    "monthly": {
+     "single": {
+      "deduction": 616.7,
+      "perExemption": 83.3
+     },
+     "married": {
+      "deduction": 662.5,
+      "perExemption": 83.3
+     }
+    },
+    "annual": {
+     "single": {
+      "deduction": 7400,
+      "perExemption": 1000
+     },
+     "married": {
+      "deduction": 7950,
+      "perExemption": 1000
+     }
+    }
+   },
+   "exactCalculation": {
+    "single": {
+     "biweekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 327,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 327,
+       "lessThan": 450,
+       "subtract": 327,
+       "rate": 0.044,
+       "add": 12.77
+      },
+      {
+       "atLeast": 450,
+       "lessThan": 535,
+       "subtract": 450,
+       "rate": 0.0515,
+       "add": 18.15
+      },
+      {
+       "atLeast": 535,
+       "lessThan": 3102,
+       "subtract": 535,
+       "rate": 0.054,
+       "add": 22.54
+      },
+      {
+       "atLeast": 3102,
+       "lessThan": 3723,
+       "subtract": 3102,
+       "rate": 0.059,
+       "add": 161.15
+      },
+      {
+       "atLeast": 3723,
+       "lessThan": 4140,
+       "subtract": 3723,
+       "rate": 0.0703,
+       "add": 197.81
+      },
+      {
+       "atLeast": 4140,
+       "lessThan": 6063,
+       "subtract": 4140,
+       "rate": 0.0753,
+       "add": 227.15
+      },
+      {
+       "atLeast": 6063,
+       "lessThan": 8285,
+       "subtract": 6063,
+       "rate": 0.064,
+       "add": 372.04
+      },
+      {
+       "atLeast": 8285,
+       "lessThan": 10208,
+       "subtract": 8285,
+       "rate": 0.1144,
+       "add": 514.19
+      },
+      {
+       "atLeast": 10208,
+       "lessThan": 41444,
+       "subtract": 10208,
+       "rate": 0.0735,
+       "add": 734.27
+      },
+      {
+       "atLeast": 41444,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "daily": [
+      {
+       "atLeast": 0,
+       "lessThan": 33,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 33,
+       "lessThan": 45,
+       "subtract": 33,
+       "rate": 0.044,
+       "add": 1.28
+      },
+      {
+       "atLeast": 45,
+       "lessThan": 53,
+       "subtract": 45,
+       "rate": 0.0515,
+       "add": 1.82
+      },
+      {
+       "atLeast": 53,
+       "lessThan": 310,
+       "subtract": 53,
+       "rate": 0.054,
+       "add": 2.25
+      },
+      {
+       "atLeast": 310,
+       "lessThan": 372,
+       "subtract": 310,
+       "rate": 0.059,
+       "add": 16.12
+      },
+      {
+       "atLeast": 372,
+       "lessThan": 414,
+       "subtract": 372,
+       "rate": 0.0703,
+       "add": 19.78
+      },
+      {
+       "atLeast": 414,
+       "lessThan": 606,
+       "subtract": 414,
+       "rate": 0.0753,
+       "add": 22.72
+      },
+      {
+       "atLeast": 606,
+       "lessThan": 828,
+       "subtract": 606,
+       "rate": 0.064,
+       "add": 37.2
+      },
+      {
+       "atLeast": 828,
+       "lessThan": 1021,
+       "subtract": 828,
+       "rate": 0.1144,
+       "add": 51.42
+      },
+      {
+       "atLeast": 1021,
+       "lessThan": 4144,
+       "subtract": 1021,
+       "rate": 0.0735,
+       "add": 73.43
+      },
+      {
+       "atLeast": 4144,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "semimonthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 354,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 354,
+       "lessThan": 488,
+       "subtract": 354,
+       "rate": 0.044,
+       "add": 13.83
+      },
+      {
+       "atLeast": 488,
+       "lessThan": 579,
+       "subtract": 488,
+       "rate": 0.0515,
+       "add": 19.67
+      },
+      {
+       "atLeast": 579,
+       "lessThan": 3360,
+       "subtract": 579,
+       "rate": 0.054,
+       "add": 24.42
+      },
+      {
+       "atLeast": 3360,
+       "lessThan": 4033,
+       "subtract": 3360,
+       "rate": 0.059,
+       "add": 174.58
+      },
+      {
+       "atLeast": 4033,
+       "lessThan": 4485,
+       "subtract": 4033,
+       "rate": 0.0703,
+       "add": 214.29
+      },
+      {
+       "atLeast": 4485,
+       "lessThan": 6569,
+       "subtract": 4485,
+       "rate": 0.0753,
+       "add": 246.08
+      },
+      {
+       "atLeast": 6569,
+       "lessThan": 8975,
+       "subtract": 6569,
+       "rate": 0.064,
+       "add": 403.04
+      },
+      {
+       "atLeast": 8975,
+       "lessThan": 11058,
+       "subtract": 8975,
+       "rate": 0.1144,
+       "add": 557.04
+      },
+      {
+       "atLeast": 11058,
+       "lessThan": 44898,
+       "subtract": 11058,
+       "rate": 0.0735,
+       "add": 795.46
+      },
+      {
+       "atLeast": 44898,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "weekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 163,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 163,
+       "lessThan": 225,
+       "subtract": 163,
+       "rate": 0.044,
+       "add": 6.38
+      },
+      {
+       "atLeast": 225,
+       "lessThan": 267,
+       "subtract": 225,
+       "rate": 0.0515,
+       "add": 9.08
+      },
+      {
+       "atLeast": 267,
+       "lessThan": 1551,
+       "subtract": 267,
+       "rate": 0.054,
+       "add": 11.27
+      },
+      {
+       "atLeast": 1551,
+       "lessThan": 1862,
+       "subtract": 1551,
+       "rate": 0.059,
+       "add": 80.58
+      },
+      {
+       "atLeast": 1862,
+       "lessThan": 2070,
+       "subtract": 1862,
+       "rate": 0.0703,
+       "add": 98.9
+      },
+      {
+       "atLeast": 2070,
+       "lessThan": 3032,
+       "subtract": 2070,
+       "rate": 0.0753,
+       "add": 113.58
+      },
+      {
+       "atLeast": 3032,
+       "lessThan": 4142,
+       "subtract": 3032,
+       "rate": 0.064,
+       "add": 186.02
+      },
+      {
+       "atLeast": 4142,
+       "lessThan": 5104,
+       "subtract": 4142,
+       "rate": 0.1144,
+       "add": 257.1
+      },
+      {
+       "atLeast": 5104,
+       "lessThan": 20722,
+       "subtract": 5104,
+       "rate": 0.0735,
+       "add": 367.13
+      },
+      {
+       "atLeast": 20722,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "monthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 708,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 708,
+       "lessThan": 975,
+       "subtract": 708,
+       "rate": 0.044,
+       "add": 27.67
+      },
+      {
+       "atLeast": 975,
+       "lessThan": 1158,
+       "subtract": 975,
+       "rate": 0.0515,
+       "add": 39.33
+      },
+      {
+       "atLeast": 1158,
+       "lessThan": 6721,
+       "subtract": 1158,
+       "rate": 0.054,
+       "add": 48.83
+      },
+      {
+       "atLeast": 6721,
+       "lessThan": 8067,
+       "subtract": 6721,
+       "rate": 0.059,
+       "add": 349.17
+      },
+      {
+       "atLeast": 8067,
+       "lessThan": 8971,
+       "subtract": 8067,
+       "rate": 0.0703,
+       "add": 428.58
+      },
+      {
+       "atLeast": 8971,
+       "lessThan": 13138,
+       "subtract": 8971,
+       "rate": 0.0753,
+       "add": 492.17
+      },
+      {
+       "atLeast": 13138,
+       "lessThan": 17950,
+       "subtract": 13138,
+       "rate": 0.064,
+       "add": 806.08
+      },
+      {
+       "atLeast": 17950,
+       "lessThan": 22117,
+       "subtract": 17950,
+       "rate": 0.1144,
+       "add": 1114.08
+      },
+      {
+       "atLeast": 22117,
+       "lessThan": 89796,
+       "subtract": 22117,
+       "rate": 0.0735,
+       "add": 1590.92
+      },
+      {
+       "atLeast": 89796,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ]
+    },
+    "married": {
+     "biweekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 327,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 327,
+       "lessThan": 450,
+       "subtract": 327,
+       "rate": 0.044,
+       "add": 12.77
+      },
+      {
+       "atLeast": 450,
+       "lessThan": 535,
+       "subtract": 450,
+       "rate": 0.0515,
+       "add": 18.15
+      },
+      {
+       "atLeast": 535,
+       "lessThan": 3102,
+       "subtract": 535,
+       "rate": 0.054,
+       "add": 22.54
+      },
+      {
+       "atLeast": 3102,
+       "lessThan": 3723,
+       "subtract": 3102,
+       "rate": 0.059,
+       "add": 161.15
+      },
+      {
+       "atLeast": 3723,
+       "lessThan": 4140,
+       "subtract": 3723,
+       "rate": 0.0657,
+       "add": 197.81
+      },
+      {
+       "atLeast": 4140,
+       "lessThan": 6063,
+       "subtract": 4140,
+       "rate": 0.0707,
+       "add": 225.19
+      },
+      {
+       "atLeast": 6063,
+       "lessThan": 8137,
+       "subtract": 6063,
+       "rate": 0.0801,
+       "add": 361.08
+      },
+      {
+       "atLeast": 8137,
+       "lessThan": 12431,
+       "subtract": 8137,
+       "rate": 0.064,
+       "add": 527.23
+      },
+      {
+       "atLeast": 12431,
+       "lessThan": 14354,
+       "subtract": 12431,
+       "rate": 0.1349,
+       "add": 802.08
+      },
+      {
+       "atLeast": 14354,
+       "lessThan": 41444,
+       "subtract": 14354,
+       "rate": 0.0735,
+       "add": 1061.54
+      },
+      {
+       "atLeast": 41444,
+       "lessThan": 82898,
+       "subtract": 41444,
+       "rate": 0.0765,
+       "add": 3052.65
+      },
+      {
+       "atLeast": 82898,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "daily": [
+      {
+       "atLeast": 0,
+       "lessThan": 33,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 33,
+       "lessThan": 45,
+       "subtract": 33,
+       "rate": 0.044,
+       "add": 1.28
+      },
+      {
+       "atLeast": 45,
+       "lessThan": 53,
+       "subtract": 45,
+       "rate": 0.0515,
+       "add": 1.82
+      },
+      {
+       "atLeast": 53,
+       "lessThan": 310,
+       "subtract": 53,
+       "rate": 0.054,
+       "add": 2.25
+      },
+      {
+       "atLeast": 310,
+       "lessThan": 372,
+       "subtract": 310,
+       "rate": 0.059,
+       "add": 16.12
+      },
+      {
+       "atLeast": 372,
+       "lessThan": 414,
+       "subtract": 372,
+       "rate": 0.0657,
+       "add": 19.78
+      },
+      {
+       "atLeast": 414,
+       "lessThan": 606,
+       "subtract": 414,
+       "rate": 0.0707,
+       "add": 22.52
+      },
+      {
+       "atLeast": 606,
+       "lessThan": 814,
+       "subtract": 606,
+       "rate": 0.0801,
+       "add": 36.11
+      },
+      {
+       "atLeast": 814,
+       "lessThan": 1243,
+       "subtract": 814,
+       "rate": 0.064,
+       "add": 52.72
+      },
+      {
+       "atLeast": 1243,
+       "lessThan": 1435,
+       "subtract": 1243,
+       "rate": 0.1349,
+       "add": 80.21
+      },
+      {
+       "atLeast": 1435,
+       "lessThan": 4144,
+       "subtract": 1435,
+       "rate": 0.0735,
+       "add": 106.15
+      },
+      {
+       "atLeast": 4144,
+       "lessThan": 8290,
+       "subtract": 4144,
+       "rate": 0.0765,
+       "add": 305.27
+      },
+      {
+       "atLeast": 8290,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "semimonthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 354,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 354,
+       "lessThan": 488,
+       "subtract": 354,
+       "rate": 0.044,
+       "add": 13.83
+      },
+      {
+       "atLeast": 488,
+       "lessThan": 579,
+       "subtract": 488,
+       "rate": 0.0515,
+       "add": 19.67
+      },
+      {
+       "atLeast": 579,
+       "lessThan": 3360,
+       "subtract": 579,
+       "rate": 0.054,
+       "add": 24.42
+      },
+      {
+       "atLeast": 3360,
+       "lessThan": 4033,
+       "subtract": 3360,
+       "rate": 0.059,
+       "add": 174.58
+      },
+      {
+       "atLeast": 4033,
+       "lessThan": 4485,
+       "subtract": 4033,
+       "rate": 0.0657,
+       "add": 214.29
+      },
+      {
+       "atLeast": 4485,
+       "lessThan": 6569,
+       "subtract": 4485,
+       "rate": 0.0707,
+       "add": 243.96
+      },
+      {
+       "atLeast": 6569,
+       "lessThan": 8815,
+       "subtract": 6569,
+       "rate": 0.0801,
+       "add": 391.17
+      },
+      {
+       "atLeast": 8815,
+       "lessThan": 13467,
+       "subtract": 8815,
+       "rate": 0.064,
+       "add": 571.17
+      },
+      {
+       "atLeast": 13467,
+       "lessThan": 15550,
+       "subtract": 13467,
+       "rate": 0.1349,
+       "add": 868.92
+      },
+      {
+       "atLeast": 15550,
+       "lessThan": 44898,
+       "subtract": 15550,
+       "rate": 0.0735,
+       "add": 1150
+      },
+      {
+       "atLeast": 44898,
+       "lessThan": 89806,
+       "subtract": 44898,
+       "rate": 0.0765,
+       "add": 3307.04
+      },
+      {
+       "atLeast": 89806,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "weekly": [
+      {
+       "atLeast": 0,
+       "lessThan": 163,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 163,
+       "lessThan": 225,
+       "subtract": 163,
+       "rate": 0.044,
+       "add": 6.38
+      },
+      {
+       "atLeast": 225,
+       "lessThan": 267,
+       "subtract": 225,
+       "rate": 0.0515,
+       "add": 9.08
+      },
+      {
+       "atLeast": 267,
+       "lessThan": 1551,
+       "subtract": 267,
+       "rate": 0.054,
+       "add": 11.27
+      },
+      {
+       "atLeast": 1551,
+       "lessThan": 1862,
+       "subtract": 1551,
+       "rate": 0.059,
+       "add": 80.58
+      },
+      {
+       "atLeast": 1862,
+       "lessThan": 2070,
+       "subtract": 1862,
+       "rate": 0.0657,
+       "add": 98.9
+      },
+      {
+       "atLeast": 2070,
+       "lessThan": 3032,
+       "subtract": 2070,
+       "rate": 0.0707,
+       "add": 112.6
+      },
+      {
+       "atLeast": 3032,
+       "lessThan": 4068,
+       "subtract": 3032,
+       "rate": 0.0801,
+       "add": 180.54
+      },
+      {
+       "atLeast": 4068,
+       "lessThan": 6215,
+       "subtract": 4068,
+       "rate": 0.064,
+       "add": 263.62
+      },
+      {
+       "atLeast": 6215,
+       "lessThan": 7177,
+       "subtract": 6215,
+       "rate": 0.1349,
+       "add": 401.04
+      },
+      {
+       "atLeast": 7177,
+       "lessThan": 20722,
+       "subtract": 7177,
+       "rate": 0.0735,
+       "add": 530.77
+      },
+      {
+       "atLeast": 20722,
+       "lessThan": 41449,
+       "subtract": 20722,
+       "rate": 0.0765,
+       "add": 1526.33
+      },
+      {
+       "atLeast": 41449,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ],
+     "monthly": [
+      {
+       "atLeast": 0,
+       "lessThan": 708,
+       "subtract": 0,
+       "rate": 0.039,
+       "add": 0
+      },
+      {
+       "atLeast": 708,
+       "lessThan": 975,
+       "subtract": 708,
+       "rate": 0.044,
+       "add": 27.67
+      },
+      {
+       "atLeast": 975,
+       "lessThan": 1158,
+       "subtract": 975,
+       "rate": 0.0515,
+       "add": 39.33
+      },
+      {
+       "atLeast": 1158,
+       "lessThan": 6721,
+       "subtract": 1158,
+       "rate": 0.054,
+       "add": 48.83
+      },
+      {
+       "atLeast": 6721,
+       "lessThan": 8067,
+       "subtract": 6721,
+       "rate": 0.059,
+       "add": 349.17
+      },
+      {
+       "atLeast": 8067,
+       "lessThan": 8971,
+       "subtract": 8067,
+       "rate": 0.0657,
+       "add": 428.58
+      },
+      {
+       "atLeast": 8971,
+       "lessThan": 13138,
+       "subtract": 8971,
+       "rate": 0.0707,
+       "add": 487.92
+      },
+      {
+       "atLeast": 13138,
+       "lessThan": 17629,
+       "subtract": 13138,
+       "rate": 0.0801,
+       "add": 782.33
+      },
+      {
+       "atLeast": 17629,
+       "lessThan": 26933,
+       "subtract": 17629,
+       "rate": 0.064,
+       "add": 1142.33
+      },
+      {
+       "atLeast": 26933,
+       "lessThan": 31100,
+       "subtract": 26933,
+       "rate": 0.1349,
+       "add": 1737.83
+      },
+      {
+       "atLeast": 31100,
+       "lessThan": 89796,
+       "subtract": 31100,
+       "rate": 0.0735,
+       "add": 2300
+      },
+      {
+       "atLeast": 89796,
+       "lessThan": 179613,
+       "subtract": 89796,
+       "rate": 0.0765,
+       "add": 6614.08
+      },
+      {
+       "atLeast": 179613,
+       "lessThan": null,
+       "unsupported": "Method III"
+      }
+     ]
+    }
+   }
+  }
+ }
+}

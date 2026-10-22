@@ -1,0 +1,12 @@
+{
+  "description": "Active, validated dataset versions by tax year. A version is activated only by committing it here after `npm run data:validate` and `npm test` pass.",
+  "reviewAfterDays": 120,
+  "activeVersions": {
+    "dfas-military-pay": { "2026": "2026.1" },
+    "dtmo-bah-ny": { "2026": "2026.1" },
+    "irs-federal-tax": { "2026": "2026.1" },
+    "ny-income-tax": { "2026": "2026.1" },
+    "ny-withholding": { "2026": "2026.1" },
+    "ny-sad-rules": { "2026": "2026.1" }
+  }
+}

@@ -1,97 +1,519 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pay Calculator - MilPayRuck</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
-    <nav>
-        <a href="/dashboard">Dashboard</a>
-        <a href="/profile">Profile</a>
-        <a href="/budget">Budget</a>
-        <a href="/transactions">Transactions</a>
-        <a href="/pay-calculator">Pay Calculator</a>
-        <a href="/ai-coach">AI Coach</a>
-        <a href="/logout">Logout</a>
-    </nav>
+<%
+  const money = (value) => value === null || value === undefined ? "n/a" : (value < 0 ? "-$" : "$") + Math.abs(value).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const v = values;
+  const sel = (field, option) => String(v[field]) === String(option) ? "selected" : "";
+  const chk = (field) => v[field] === "on" || v[field] === "true" ? "checked" : "";
+  const basisLabel = { confirmed: "Confirmed rule", "general-rule": "General rule", assumed: "Assumption", unresolved: "Unresolved" };
+  const grades = ["E-1","E-2","E-3","E-4","E-5","E-6","E-7","E-8","E-9","W-1","W-2","W-3","W-4","W-5","O-1","O-2","O-3","O-4","O-5","O-6","O-7","O-8","O-9","O-10","O-1E","O-2E","O-3E"];
+%>
 
-<div class="container">
+<nav>
+    <a href="/dashboard">Dashboard</a>
+    <a href="/profile">Profile</a>
+    <a href="/budget">Budget</a>
+    <a href="/transactions">Transactions</a>
+    <a href="/pay-calculator">Pay Calculator</a>
+    <a href="/ai-coach">AI Coach</a>
+    <a href="/logout">Logout</a>
+</nav>
 
-    <h1>Military Pay Calculator</h1>
-    <p>Estimate monthly military pay based on rank, time in service, ZIP code, and dependency status.</p>
+<div class="container calculator">
 
-    <form action="/pay-calculator" method="POST">
+    <h1>Military &amp; NY State Active Duty Pay Estimator</h1>
+    <p>Estimate federal active duty, drill, or New York State Active Duty (SAD) pay with federal, New York State, NYC and Yonkers taxes. Rates come from validated official snapshots (2026). Your entries are used only for this calculation and are not saved.</p>
+    <p class="notice">This is an estimate, not a payroll statement. Rules that could not be verified are labeled and kept out of the totals they would affect.</p>
 
-        <select name="rank" required>
-            <option value="">Select Rank</option>
-        
-            <option value="E1">E1</option>
-            <option value="E2">E2</option>
-            <option value="E3">E3</option>
-            <option value="E4">E4</option>
-            <option value="E5">E5</option>
-            <option value="E6">E6</option>
-            <option value="E7">E7</option>
-            <option value="E8">E8</option>
-            <option value="E9">E9</option>
-        
-            <option value="W1">W1</option>
-            <option value="W2">W2</option>
-            <option value="W3">W3</option>
-            <option value="W4">W4</option>
-            <option value="W5">W5</option>
-        
-            <option value="O1">O1</option>
-            <option value="O2">O2</option>
-            <option value="O3">O3</option>
-            <option value="O4">O4</option>
-            <option value="O5">O5</option>
-            <option value="O6">O6</option>
-            <option value="O7">O7</option>
-            <option value="O8">O8</option>
-            <option value="O9">O9</option>
-            <option value="O10">O10</option>
-        </select>
+    <% if (budgetSaved) { %>
+        <p class="notice success">Saved the monthly average net pay to your budget.</p>
+    <% } %>
 
-        <br><br>
+    <% if (errors.length) { %>
+        <div class="notice error" role="alert">
+            <strong>Please fix the following:</strong>
+            <ul><% errors.forEach((error) => { %><li><%= error %></li><% }) %></ul>
+        </div>
+    <% } %>
 
-        <select name="dependents" required>
-            <option value="yes" <%= typeof profile !== 'undefined' && profile && profile.dependents > 0 ? 'selected' : '' %>>
-                With Dependents
-            </option>
-        
-            <option value="no" <%= typeof profile !== 'undefined' && profile && profile.dependents === 0 ? 'selected' : '' %>>
-                Without Dependents
-            </option>
-        </select>
+    <form action="/pay-calculator" method="POST" class="calc-form" id="calc-form">
 
-        <br><br>
+        <fieldset>
+            <legend>1. Pay mode and year</legend>
+            <div class="field-grid">
+                <label>Pay mode
+                    <select name="mode" id="mode">
+                        <option value="sad" <%= sel("mode","sad") %>>New York State Active Duty (SAD)</option>
+                        <option value="active" <%= sel("mode","active") %>>Federal active duty</option>
+                        <option value="drill" <%= sel("mode","drill") %>>Drill (inactive duty training)</option>
+                    </select>
+                </label>
+                <label>Tax year
+                    <select name="taxYear">
+                        <% [...new Set([...availableYears, 2027])].forEach((year) => { %>
+                            <option value="<%= year %>" <%= sel("taxYear", year) %>><%= year %><%= availableYears.includes(year) ? "" : " (no validated data)" %></option>
+                        <% }) %>
+                    </select>
+                </label>
+                <label>Pay grade
+                    <select name="grade">
+                        <% grades.forEach((grade) => { %><option value="<%= grade %>" <%= sel("grade", grade) %>><%= grade %></option><% }) %>
+                    </select>
+                    <small>O-1E to O-3E: officers with over 4 years of enlisted/warrant service.</small>
+                </label>
+                <label>Pay entry base date (service start)
+                    <input type="date" name="serviceStartDate" value="<%= v.serviceStartDate %>" required>
+                    <small>Used for years of service on each date, so raises on your anniversary are applied.</small>
+                </label>
+            </div>
+        </fieldset>
 
-        <button type="submit">Calculate Pay</button>
+        <fieldset data-modes="active sad">
+            <legend>2. Duty dates</legend>
+            <label>Duty periods (one per line)
+                <textarea name="periods" rows="3" placeholder="2026-03-01 to 2026-06-30"><%= v.periods %></textarea>
+                <small>SAD is paid for each calendar day of duty. Active duty uses the DoD 30-day month.</small>
+            </label>
+            <div class="field-grid" data-modes="sad">
+                <label>First SAD pay date
+                    <input type="date" name="sadFirstPayDate" value="<%= v.sadFirstPayDate %>">
+                    <small>SAD is assumed to be paid every 14 days from this date.</small>
+                </label>
+                <label>Days between end of pay period and pay date
+                    <input type="number" name="sadPayLagDays" min="0" max="60" value="<%= v.sadPayLagDays %>">
+                </label>
+            </div>
+            <label class="check" data-modes="active">
+                <input type="checkbox" name="ordersAtLeast30Days" <%= chk("ordersAtLeast30Days") %>> Active component, or reserve orders of 30 days or more (locality BAH)
+            </label>
+        </fieldset>
 
+        <fieldset data-modes="drill">
+            <legend>2. Drill dates</legend>
+            <label>Drill dates and periods (one per line)
+                <textarea name="drills" rows="4" placeholder="2026-03-14, 2&#10;2026-03-15, 2"><%= v.drills %></textarea>
+                <small>Each drill period pays 1/30 of monthly basic pay. A typical drill weekend is 4 periods.</small>
+            </label>
+            <label>Days from drill to payment
+                <input type="number" name="drillPayLagDays" min="0" max="120" value="<%= v.drillPayLagDays %>">
+            </label>
+        </fieldset>
+
+        <fieldset data-modes="active sad">
+            <legend>3. Allowances</legend>
+            <div class="field-grid">
+                <label>BAH
+                    <select name="bahSource">
+                        <option value="none" <%= sel("bahSource","none") %>>None</option>
+                        <option value="locality" <%= sel("bahSource","locality") %>>New York housing area rate</option>
+                        <option value="manual" <%= sel("bahSource","manual") %>>Enter monthly amount</option>
+                    </select>
+                </label>
+                <label>Military housing area (duty station)
+                    <select name="housingArea">
+                        <% housingAreas.forEach((area) => { %><option value="<%= area.code %>" <%= sel("housingArea", area.code) %>><%= area.code %> <%= area.name %></option><% }) %>
+                    </select>
+                </label>
+                <label>Dependents for BAH
+                    <select name="withDependents">
+                        <option value="no" <%= sel("withDependents","no") %>>Without dependents</option>
+                        <option value="yes" <%= sel("withDependents","yes") %>>With dependents</option>
+                    </select>
+                </label>
+                <label>Manual BAH (monthly)
+                    <input type="number" step="0.01" min="0" name="bahManual" value="<%= v.bahManual %>">
+                </label>
+            </div>
+            <label class="check"><input type="checkbox" name="basEligible" <%= chk("basEligible") %>> Eligible for BAS</label>
+            <p class="hint" data-modes="sad">Military Law &sect;210(1) pays SAD at the federal pay <em>and allowances</em> of your grade, or $125/day if greater. Which BAH rate DMNA uses was not verified; choose what your SAD pay statement shows.</p>
+        </fieldset>
+
+        <fieldset data-modes="sad">
+            <legend>4. SAD orders and payroll treatment</legend>
+            <div class="field-grid">
+                <label>Military Law section cited on your SAD orders
+                    <select name="sadOrdersAuthority">
+                        <option value="unknown" <%= sel("sadOrdersAuthority","unknown") %>>Not sure</option>
+                        <option value="6.1" <%= sel("sadOrdersAuthority","6.1") %>>&sect;6(1) (governor's order: disaster, riot, breach of peace, etc.)</option>
+                        <option value="other" <%= sel("sadOrdersAuthority","other") %>>Another section</option>
+                    </select>
+                </label>
+                <label>Social Security/Medicare on SAD pay
+                    <select name="sadPayrollTax">
+                        <option value="unresolved" <%= sel("sadPayrollTax","unresolved") %>>Not verified (show both ways)</option>
+                        <option value="subject" <%= sel("sadPayrollTax","subject") %>>Withheld on my SAD pay statement</option>
+                        <option value="exempt" <%= sel("sadPayrollTax","exempt") %>>Not withheld on my SAD pay statement</option>
+                    </select>
+                </label>
+                <label>Federal treatment of SAD allowances
+                    <select name="sadAllowanceFederal">
+                        <option value="taxable" <%= sel("sadAllowanceFederal","taxable") %>>Taxable (default; exclusion not verified)</option>
+                        <option value="excluded" <%= sel("sadAllowanceFederal","excluded") %>>Excluded (my assumption)</option>
+                    </select>
+                </label>
+            </div>
+            <label class="check"><input type="checkbox" name="sadWithinNy" <%= chk("sadWithinNy") %>> Duty performed within New York State</label>
+        </fieldset>
+
+        <fieldset data-modes="active">
+            <legend>4. New York organized militia</legend>
+            <label class="check"><input type="checkbox" name="nyOrganizedMilitia" <%= chk("nyOrganizedMilitia") %>> Member of the NY Army/Air National Guard, Naval Militia, or NY Guard</label>
+            <label class="check"><input type="checkbox" name="title10NonTrainingInNy" <%= chk("title10NonTrainingInNy") %>> On Title 10 orders for service other than training, performed within New York State</label>
+            <p class="hint">Both must be true for the NY S-126 subtraction on federal active duty pay.</p>
+        </fieldset>
+
+        <fieldset>
+            <legend>5. Additional payment</legend>
+            <label class="check"><input type="checkbox" name="additionalEnabled" <%= chk("additionalEnabled") %>> Include an additional payment</label>
+            <p class="hint">Default: $2,000 every 14 days, as you reported. DMNA's 2025 Annual Report mentions a $2,000 special-duty bonus every two weeks for personnel working in the prisons. Your eligibility, dates, and tax treatment were <strong>not verified</strong>, so it is taxed by default and every tax treatment below is your assumption.</p>
+            <div class="field-grid">
+                <label>Description
+                    <input type="text" name="additionalLabel" maxlength="80" value="<%= v.additionalLabel %>">
+                </label>
+                <label>Amount per payment
+                    <input type="number" step="0.01" min="0" name="additionalAmount" value="<%= v.additionalAmount %>">
+                </label>
+                <label>First payment date
+                    <input type="date" name="additionalFirstDate" value="<%= v.additionalFirstDate %>">
+                </label>
+                <label>Every (days)
+                    <input type="number" min="1" max="366" name="additionalIntervalDays" value="<%= v.additionalIntervalDays %>">
+                </label>
+                <label>Last eligible date (optional)
+                    <input type="date" name="additionalEndDate" value="<%= v.additionalEndDate %>">
+                </label>
+                <label>Withholding method
+                    <select name="supplementalMethod">
+                        <option value="aggregate" <%= sel("supplementalMethod","aggregate") %>>With the same-day paycheck (aggregate)</option>
+                        <option value="flat" <%= sel("supplementalMethod","flat") %>>Flat supplemental rates (22% federal, 11.70% NYS...)</option>
+                    </select>
+                </label>
+                <label>Federal income tax
+                    <select name="additionalFederal">
+                        <option value="taxable" <%= sel("additionalFederal","taxable") %>>Taxable (default)</option>
+                        <option value="excluded" <%= sel("additionalFederal","excluded") %>>Tax-free (unverified assumption)</option>
+                    </select>
+                </label>
+                <label>New York State tax
+                    <select name="additionalNy">
+                        <option value="taxable" <%= sel("additionalNy","taxable") %>>Taxable (default)</option>
+                        <option value="s126" <%= sel("additionalNy","s126") %>>Same as SAD pay under S-126 (unverified)</option>
+                        <option value="excluded" <%= sel("additionalNy","excluded") %>>Tax-free (unverified assumption)</option>
+                    </select>
+                </label>
+                <label>Local tax (NYC/Yonkers)
+                    <select name="additionalLocal">
+                        <option value="taxable" <%= sel("additionalLocal","taxable") %>>Taxable where applicable (default)</option>
+                        <option value="excluded" <%= sel("additionalLocal","excluded") %>>Tax-free (unverified assumption)</option>
+                    </select>
+                </label>
+                <label>Social Security/Medicare
+                    <select name="additionalFica">
+                        <option value="same-as-sad" <%= sel("additionalFica","same-as-sad") %>>Same as SAD pay</option>
+                        <option value="subject" <%= sel("additionalFica","subject") %>>Withheld</option>
+                        <option value="exempt" <%= sel("additionalFica","exempt") %>>Not withheld</option>
+                    </select>
+                </label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>6. Residency and filing</legend>
+            <div class="field-grid">
+                <label>New York State residency for the year
+                    <select name="nyResidency">
+                        <option value="resident" <%= sel("nyResidency","resident") %>>Resident (NY domicile, or statutory resident)</option>
+                        <option value="nonresident" <%= sel("nyResidency","nonresident") %>>Nonresident (domicile elsewhere, or NY domicile meeting Group A/B)</option>
+                        <option value="part-year" <%= sel("nyResidency","part-year") %>>Part-year resident (NY tax not calculated)</option>
+                    </select>
+                    <small>NY domicile with no NY home, a home elsewhere, and 30 days or less in NY is nonresident (Group A). ZIP code alone does not decide this.</small>
+                </label>
+                <label>Local resident tax
+                    <select name="localResidency">
+                        <option value="none" <%= sel("localResidency","none") %>>No local resident tax</option>
+                        <option value="nyc" <%= sel("localResidency","nyc") %>>New York City resident</option>
+                        <option value="yonkers" <%= sel("localResidency","yonkers") %>>Yonkers resident</option>
+                    </select>
+                </label>
+                <label>Filing status
+                    <select name="filingStatus">
+                        <option value="single" <%= sel("filingStatus","single") %>>Single</option>
+                        <option value="mfj" <%= sel("filingStatus","mfj") %>>Married filing jointly</option>
+                        <option value="mfs" <%= sel("filingStatus","mfs") %>>Married filing separately</option>
+                        <option value="hoh" <%= sel("filingStatus","hoh") %>>Head of household</option>
+                        <option value="qss" <%= sel("filingStatus","qss") %>>Qualifying surviving spouse</option>
+                    </select>
+                </label>
+                <label>Children under 17 (child tax credit)
+                    <input type="number" min="0" max="20" name="qualifyingChildren" value="<%= v.qualifyingChildren %>">
+                </label>
+                <label>Other dependents
+                    <input type="number" min="0" max="20" name="otherDependents" value="<%= v.otherDependents %>">
+                </label>
+            </div>
+            <label class="check"><input type="checkbox" name="worksInYonkers" <%= chk("worksInYonkers") %>> SAD work performed in Yonkers (Yonkers nonresident earnings tax, if not a Yonkers resident)</label>
+            <label class="check"><input type="checkbox" name="claimedAsDependent" <%= chk("claimedAsDependent") %>> Someone can claim me as a dependent</label>
+        </fieldset>
+
+        <fieldset>
+            <legend>7. Other income, deductions and withholding elections</legend>
+            <div class="field-grid">
+                <label>Other wages for the year (incl. spouse if joint)
+                    <input type="number" step="0.01" min="0" name="otherWages" value="<%= v.otherWages %>">
+                </label>
+                <label>Other taxable income (non-wage)
+                    <input type="number" step="0.01" name="otherIncome" value="<%= v.otherIncome %>">
+                </label>
+                <label>NY-source other income (nonresidents)
+                    <input type="number" step="0.01" min="0" name="otherNySourceIncome" value="<%= v.otherNySourceIncome %>">
+                </label>
+                <label>Itemized deductions (if more than standard)
+                    <input type="number" step="0.01" min="0" name="itemizedDeductions" value="<%= v.itemizedDeductions %>">
+                </label>
+                <label>Wages already paid this year by this payer (FICA)
+                    <input type="number" step="0.01" min="0" name="priorYtdWages" value="<%= v.priorYtdWages %>">
+                </label>
+                <label>Traditional TSP/retirement (% of basic/SAD pay)
+                    <input type="number" step="0.1" min="0" max="100" name="tradRetirementPercent" value="<%= v.tradRetirementPercent %>">
+                </label>
+                <label>Pre-tax health/cafeteria per paycheck
+                    <input type="number" step="0.01" min="0" name="section125PerPay" value="<%= v.section125PerPay %>">
+                </label>
+                <label>After-tax deductions per paycheck (SGLI, Roth, etc.)
+                    <input type="number" step="0.01" min="0" name="afterTaxPerPay" value="<%= v.afterTaxPerPay %>">
+                </label>
+            </div>
+            <h3>Form W-4 (federal)</h3>
+            <div class="field-grid">
+                <label class="check"><input type="checkbox" name="w4Step2" <%= chk("w4Step2") %>> Step 2 box checked (multiple jobs)</label>
+                <label>Step 3 credits
+                    <input type="number" step="0.01" min="0" name="w4Credits" value="<%= v.w4Credits %>">
+                </label>
+                <label>Step 4(a) other income
+                    <input type="number" step="0.01" min="0" name="w4OtherIncome" value="<%= v.w4OtherIncome %>">
+                </label>
+                <label>Step 4(b) deductions
+                    <input type="number" step="0.01" min="0" name="w4Deductions" value="<%= v.w4Deductions %>">
+                </label>
+                <label>Step 4(c) extra per paycheck
+                    <input type="number" step="0.01" min="0" name="w4Extra" value="<%= v.w4Extra %>">
+                </label>
+            </div>
+            <h3>Form IT-2104 (New York)</h3>
+            <div class="field-grid">
+                <label>Withholding status
+                    <select name="nyWithholdingStatus">
+                        <option value="single" <%= sel("nyWithholdingStatus","single") %>>Single or head of household</option>
+                        <option value="married" <%= sel("nyWithholdingStatus","married") %>>Married</option>
+                    </select>
+                </label>
+                <label>NYS/Yonkers allowances
+                    <input type="number" min="0" max="99" name="nysAllowances" value="<%= v.nysAllowances %>">
+                </label>
+                <label>NYC allowances
+                    <input type="number" min="0" max="99" name="nycAllowances" value="<%= v.nycAllowances %>">
+                </label>
+                <label>Extra NYS per paycheck
+                    <input type="number" step="0.01" min="0" name="nyExtra" value="<%= v.nyExtra %>">
+                </label>
+            </div>
+        </fieldset>
+
+        <button type="submit">Calculate estimate</button>
     </form>
 
-    <% if (typeof result !== "undefined") { %>
+    <% if (result && result.status === "blocked") { %>
+        <div class="notice error" role="alert">
+            <h2>Calculation blocked</h2>
+            <p><%= result.message %></p>
+            <ul><% result.blocked.forEach((item) => { %><li><strong><%= item.datasetId %></strong>: <%= item.reason %></li><% }) %></ul>
+            <p>Validated years available: <%= result.availableYears.join(", ") || "none" %>.</p>
+        </div>
+    <% } %>
 
-        <hr>
+    <% if (result && result.status === "ok") { const t = result.totals; const typical = result.rows.filter((r) => r.stream === "regular").sort((a, b) => b.gross - a.gross)[0] || result.rows[0]; %>
+    <section class="results" id="results">
+        <h2>Estimate for <%= result.taxYear %></h2>
 
-        <h2>Pay Estimate</h2>
+        <% if (result.dataWarnings.length) { %>
+            <div class="notice error"><ul><% result.dataWarnings.forEach((w) => { %><li><%= w %></li><% }) %></ul></div>
+        <% } %>
+        <% if (result.gated.length) { %>
+            <div class="notice warn">
+                <strong>Not included because the rule is unresolved:</strong>
+                <ul><% result.gated.forEach((g) => { %><li><strong><%= g.item %>:</strong> <%= g.reason %> <em>Authority needed: <%= g.authorityNeeded %></em></li><% }) %></ul>
+            </div>
+        <% } %>
 
-        <p><strong>Rank:</strong> <%= result.rank %></p>
-        <p><strong>Years of Service:</strong> <%= result.timeInService %></p>
-        <p><strong>ZIP Code:</strong> <%= result.zipCode %></p>
-        <p><strong>Dependents:</strong> <%= result.dependents %></p>
+        <div class="dashboard-grid">
+            <div class="card"><h3>Gross pay (actual, <%= result.taxYear %>)</h3><p class="big"><%= money(t.gross) %></p><p><%= result.rows.length %> payment dates</p></div>
+            <div class="card"><h3>Estimated take-home (actual)</h3><p class="big"><%= money(t.net) %></p>
+                <% if (t.netIfFicaApplied !== null) { %><p>If Social Security/Medicare apply: <strong><%= money(t.netIfFicaApplied) %></strong></p><% } %></div>
+            <div class="card"><h3>Monthly average (annual &divide; 12)</h3><p class="big"><%= money(result.average.net) %></p><p>Gross <%= money(result.average.gross) %>. An average, not a paycheck.</p></div>
+            <div class="card"><h3>Largest regular paycheck</h3><p class="big"><%= money(typical.net) %></p><p><%= typical.date %>: gross <%= money(typical.gross) %></p></div>
+        </div>
 
-        <p><strong>Base Pay:</strong> $<%= result.basePay %></p>
-        <p><strong>BAS:</strong> $<%= result.bas %></p>
-        <p><strong>BAH:</strong> $<%= result.bah %></p>
+        <h3>Itemized annual breakdown</h3>
+        <div class="table-wrap">
+        <table>
+            <thead><tr><th>Item</th><th class="num">Amount</th></tr></thead>
+            <tbody>
+                <% Object.entries(result.byComponent).forEach(([label, amount]) => { %><tr><td><%= label %></td><td class="num"><%= money(amount) %></td></tr><% }) %>
+                <tr class="total"><td>Gross compensation</td><td class="num"><%= money(t.gross) %></td></tr>
+                <tr><td>Pre-tax retirement</td><td class="num">-<%= money(t.retirement) %></td></tr>
+                <tr><td>Pre-tax health/cafeteria</td><td class="num">-<%= money(t.section125) %></td></tr>
+                <tr><td>Taxable wages: federal income tax</td><td class="num"><%= money(t.federalWages) %></td></tr>
+                <tr><td>Taxable wages: New York (withholding base)</td><td class="num"><%= money(t.nyWages) %></td></tr>
+                <tr><td>NY subtractions (S-126 / S-119) used for liability</td><td class="num"><%= result.newYork ? money(result.newYork.subtractions) : "n/a" %></td></tr>
+                <tr><td>Taxable wages: Social Security/Medicare</td><td class="num"><%= money(t.ficaWages) %></td></tr>
+                <% if (t.ficaUnresolvedWages) { %><tr><td>Wages with unresolved payroll-tax treatment</td><td class="num"><%= money(t.ficaUnresolvedWages) %></td></tr><% } %>
+                <% if (t.yonkersNonresidentWages) { %><tr><td>Yonkers nonresident earnings</td><td class="num"><%= money(t.yonkersNonresidentWages) %></td></tr><% } %>
+                <tr><td>Federal income tax withheld</td><td class="num">-<%= money(t.withholding.federal) %></td></tr>
+                <tr><td>NYS income tax withheld</td><td class="num">-<%= money(t.withholding.nys) %></td></tr>
+                <tr><td>NYC income tax withheld</td><td class="num">-<%= money(t.withholding.nyc) %></td></tr>
+                <tr><td>Yonkers tax withheld</td><td class="num">-<%= money(t.withholding.yonkers) %></td></tr>
+                <tr><td>Social Security withheld</td><td class="num">-<%= money(t.withholding.socialSecurity) %></td></tr>
+                <tr><td>Medicare withheld (incl. additional)</td><td class="num">-<%= money(t.withholding.medicare + t.withholding.additionalMedicare) %></td></tr>
+                <tr><td>After-tax deductions</td><td class="num">-<%= money(t.afterTax) %></td></tr>
+                <tr class="total"><td>Estimated net pay</td><td class="num"><%= money(t.net) %></td></tr>
+            </tbody>
+        </table>
+        </div>
 
-        <h3>Gross Monthly Pay: $<%= result.grossMonthlyPay %></h3>
+        <h3>Annual liability vs. withholding</h3>
+        <p class="hint">Liability is the tax computed for the whole year with progressive brackets; withholding is what payroll is estimated to deduct. A positive difference suggests a refund, negative a balance due.</p>
+        <div class="table-wrap">
+        <table>
+            <thead><tr><th>Tax</th><th class="num">Estimated liability</th><th class="num">Estimated withholding</th><th class="num">Difference</th></tr></thead>
+            <tbody>
+                <tr><td>Federal income tax (+ Additional Medicare)</td><td class="num"><%= money(result.liability.federalIncomeTax + result.liability.additionalMedicareTax) %></td><td class="num"><%= money(t.withholding.federal + t.withholding.additionalMedicare) %></td><td class="num"><%= money(result.comparisons.federal) %></td></tr>
+                <tr><td>New York State</td><td class="num"><%= money(result.liability.nys) %></td><td class="num"><%= money(t.withholding.nys) %></td><td class="num"><%= money(result.comparisons.nys) %></td></tr>
+                <tr><td>New York City</td><td class="num"><%= money(result.liability.nyc) %></td><td class="num"><%= money(t.withholding.nyc) %></td><td class="num"><%= money(result.comparisons.nyc) %></td></tr>
+                <tr><td>Yonkers</td><td class="num"><%= money(result.liability.yonkers) %></td><td class="num"><%= money(t.withholding.yonkers) %></td><td class="num"><%= money(result.comparisons.yonkers) %></td></tr>
+            </tbody>
+        </table>
+        </div>
+        <details>
+            <summary>How the liability was computed</summary>
+            <ul>
+                <li>Federal AGI <%= money(result.federal.agi) %> &minus; <%= result.federal.deductionUsed %> deduction <%= money(result.federal.deduction) %> = taxable income <%= money(result.federal.taxableIncome) %>. Tax from 2026 brackets <%= money(result.federal.taxBeforeCredits) %> (top bracket reached <%= (result.federal.marginalRate * 100).toFixed(0) %>%; lower brackets tax lower slices). Child/dependent credits: nonrefundable <%= money(result.federal.credits.nonrefundable) %>, refundable <%= money(result.federal.credits.refundable) %>.</li>
+                <% if (result.newYork) { %>
+                <li>NY AGI <%= money(result.newYork.nyagi) %> (federal AGI less subtractions <%= money(result.newYork.subtractions) %>) &minus; standard deduction <%= money(result.newYork.standardDeduction) %> &minus; dependent exemptions <%= money(result.newYork.dependentExemptions) %> = NY taxable income <%= money(result.newYork.taxableIncome) %>. Method: <%= result.newYork.method %>.<% if (result.newYork.allocation) { %> Nonresident: tax &times; NY-source ratio <%= result.newYork.allocation.ratio %>.<% } %></li>
+                <% if (result.newYork.nyc) { %><li>NYC tax on <%= money(result.newYork.nyc.taxableIncome) %> = <%= money(result.newYork.nyc.tax) %>; NYC school tax credit <%= money(result.newYork.nyc.schoolTaxCredit.total) %> applied in the NYS column.</li><% } %>
+                <% if (result.newYork.yonkers) { %><li>Yonkers <%= result.newYork.yonkers.type %>: <%= money(result.newYork.yonkers.tax) %>.</li><% } %>
+                <% } %>
+            </ul>
+        </details>
 
+        <% if (result.additionalDates.length) { %>
+        <h3>Additional payment dates (<%= result.additionalDates.length %> in <%= result.taxYear %>)</h3>
+        <p class="date-list"><%= result.additionalDates.join(", ") %></p>
+        <% } %>
+
+        <h3>Each payment</h3>
+        <div class="table-wrap">
+        <table class="small">
+            <thead><tr><th>Pay date</th><th>Covers</th><th class="num">Gross</th><th class="num">Federal</th><th class="num">NYS</th><th class="num">NYC</th><th class="num">Yonkers</th><th class="num">SS + Medicare</th><th class="num">Net</th></tr></thead>
+            <tbody>
+            <% result.rows.forEach((r) => { %>
+                <tr>
+                    <td><%= r.date %><br><small><%= r.payer %>, <%= r.period %><%= r.combined ? ", combined" : "" %></small></td>
+                    <td><small><%= r.coverage %></small><br><small><%= r.components.map((c) => c.label + " " + money(c.amount)).join("; ") %></small></td>
+                    <td class="num"><%= money(r.gross) %></td>
+                    <td class="num"><%= money(r.withholding.federal) %></td>
+                    <td class="num"><%= money(r.withholding.nys) %></td>
+                    <td class="num"><%= money(r.withholding.nyc) %></td>
+                    <td class="num"><%= money(r.withholding.yonkers) %></td>
+                    <td class="num"><%= money(r.withholding.socialSecurity + r.withholding.medicare + r.withholding.additionalMedicare) %><% if (r.ficaIfApplied) { %><br><small>unresolved: <%= money(r.ficaIfApplied) %></small><% } %></td>
+                    <td class="num"><%= money(r.net) %></td>
+                </tr>
+            <% }) %>
+            </tbody>
+        </table>
+        </div>
+
+        <h3>Monthly view</h3>
+        <p class="hint">Calendar totals use actual pay dates, so months with three 14-day payments are higher. The average row is annual &divide; 12.</p>
+        <div class="table-wrap">
+        <table class="small">
+            <thead><tr><th>Month</th><th class="num">Payments</th><th class="num">Gross</th><th class="num">Withheld</th><th class="num">Net</th></tr></thead>
+            <tbody>
+            <% result.monthly.forEach((m) => { %><tr><td><%= m.month %></td><td class="num"><%= m.payments %></td><td class="num"><%= money(m.gross) %></td><td class="num"><%= money(m.withholding) %></td><td class="num"><%= money(m.net) %></td></tr><% }) %>
+                <tr class="total"><td>Monthly average</td><td class="num"></td><td class="num"><%= money(result.average.gross) %></td><td class="num"></td><td class="num"><%= money(result.average.net) %></td></tr>
+            </tbody>
+        </table>
+        </div>
+
+        <h3>Rates applied</h3>
+        <ul>
+            <% result.rates.forEach((rate) => { %><li>Basic pay <%= money(rate.amount) %>/month (<%= rate.column %>, <%= rate.years %> years of service)</li><% }) %>
+            <% if (result.allowances) { %><li>BAH <%= money(result.allowances.bah) %>/month (<%= result.allowances.bahSource %><%= result.allowances.bahArea ? ", " + result.allowances.bahArea : "" %>); BAS <%= money(result.allowances.bas) %>/month</li><% } %>
+        </ul>
+
+        <h3>Tax treatment by component</h3>
+        <div class="table-wrap">
+        <table class="small">
+            <thead><tr><th>Component</th><th>Tax</th><th>Status</th><th>Basis</th></tr></thead>
+            <tbody>
+            <% const seen = new Set(); result.rows.flatMap((r) => r.components).forEach((c) => { ["federal", "ny", "local", "fica"].forEach((field) => { const key = c.label + field; if (seen.has(key)) return; seen.add(key); const tr = c.treatment[field]; %>
+                <tr><td><%= c.label %></td><td><%= { federal: "Federal income", ny: "New York State", local: "NYC/Yonkers", fica: "SS/Medicare" }[field] %></td><td><%= tr.status %></td><td><span class="badge badge-<%= tr.basis %>"><%= basisLabel[tr.basis] %></span> <small><%= tr.note %></small></td></tr>
+            <% }) }) %>
+            </tbody>
+        </table>
+        </div>
+
+        <h3>Assumptions</h3>
+        <ul><% result.assumptions.forEach((a) => { %><li><%= a %></li><% }) %></ul>
+        <% if (result.missingInformation.length) { %>
+            <h3>Missing information</h3>
+            <ul><% result.missingInformation.forEach((m) => { %><li><%= m %></li><% }) %></ul>
+        <% } %>
+        <h3>Not modeled</h3>
+        <ul><% result.notModeled.forEach((n) => { %><li><%= n %></li><% }) %></ul>
+
+        <h3>Official data used</h3>
+        <div class="table-wrap">
+        <table class="small">
+            <thead><tr><th>Dataset</th><th>Version</th><th>Tax year / effective</th><th>Verified</th><th>Sources (retrieved)</th></tr></thead>
+            <tbody>
+            <% result.sources.forEach((s) => { %>
+                <tr><td><%= s.datasetId %></td><td><%= s.version %> (<%= s.validationStatus %>)</td><td><%= s.taxYear %>: <%= s.effectiveFrom %> to <%= s.effectiveTo %></td><td><%= s.validatedAt %></td>
+                    <td><% s.sources.forEach((src) => { %><a href="<%= src.url %>" rel="noopener noreferrer" target="_blank"><%= src.title %></a> <small>(<%= src.publicationDate || "" %>; retrieved <%= src.retrievedAt %>)</small><br><% }) %></td></tr>
+            <% }) %>
+            </tbody>
+        </table>
+        </div>
+
+        <form action="/pay-calculator/save-to-budget" method="POST" class="save-budget">
+            <input type="hidden" name="monthlyNetAverage" value="<%= result.average.net %>">
+            <button type="submit">Use <%= money(result.average.net) %>/month average in my budget</button>
+            <small>Optional. Only this one number is saved; your pay inputs are not stored.</small>
+        </form>
+    </section>
     <% } %>
 
 </div>
+
+<script>
+    (function () {
+        var mode = document.getElementById("mode");
+        function update() {
+            document.querySelectorAll("[data-modes]").forEach(function (el) {
+                el.hidden = el.getAttribute("data-modes").split(" ").indexOf(mode.value) === -1;
+            });
+        }
+        mode.addEventListener("change", update);
+        update();
+    })();
+</script>
 
 </body>
 </html>

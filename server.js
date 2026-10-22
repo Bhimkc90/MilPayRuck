@@ -13,6 +13,7 @@ const budgetRoutes = require("./routes/budgetRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
 const debugRoutes = require("./routes/debugRoutes");
 const viewRoutes = require("./routes/viewRoutes");
+const payRoutes = require("./routes/payRoutes");
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/profile", profileRoutes);
 app.use("/api/budget", budgetRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/pay", payRoutes);
 app.use("/debug", debugRoutes);
 
 app.get("/", (req, res) => {

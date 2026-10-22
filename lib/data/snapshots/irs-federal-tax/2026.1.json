@@ -1,0 +1,130 @@
+{
+  "datasetId": "irs-federal-tax",
+  "version": "2026.1",
+  "taxYear": 2026,
+  "effectiveFrom": "2026-01-01",
+  "effectiveTo": "2026-12-31",
+  "sources": [
+    {
+      "title": "Rev. Proc. 2025-32 (2026 inflation adjustments, including OBBBA changes)",
+      "publisher": "Internal Revenue Service",
+      "url": "https://www.irs.gov/pub/irs-drop/rp-25-32.pdf",
+      "publicationDate": "2025-10",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "e9ada115fb43a4af5ea326ca91edd40ab0bf29b9be01d2c13d7b8fa96214635b",
+      "usedFor": "Tax rate tables (sec. 3.01), child tax credit $2,200 / refundable $1,700 (sec. 3.05), standard deduction (sec. 3.14)"
+    },
+    {
+      "title": "Publication 15-T (2026), Federal Income Tax Withholding Methods",
+      "publisher": "Internal Revenue Service",
+      "url": "https://www.irs.gov/pub/irs-pdf/p15t.pdf",
+      "publicationDate": "2025-12-03 (file date)",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "31b3e2428628e8d2e40f6266c2c8f1b9b0b6ccd24607895f9b3be3d9d306d3fb",
+      "usedFor": "Worksheet 1A and 2026 Annual Percentage Method tables (automated payroll)"
+    },
+    {
+      "title": "Publication 15 (2026), Employer's Tax Guide",
+      "publisher": "Internal Revenue Service",
+      "url": "https://www.irs.gov/pub/irs-pdf/p15.pdf",
+      "publicationDate": "2026",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "b46c3622439d8521e3a0faca4cd5b5ece3451b526f65f06a5e38d5c9f804c88b",
+      "usedFor": "22% optional flat supplemental-wage rate (37% over $1 million); Additional Medicare Tax withholding over $200,000; bonuses are supplemental wages"
+    },
+    {
+      "title": "Contribution and Benefit Base",
+      "publisher": "Social Security Administration",
+      "url": "https://www.ssa.gov/oact/cola/cbb.html",
+      "publicationDate": "2026-10 (lists 2027 base)",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Browser page text (SSA returns HTTP 403 to automated requests); cross-checked with DFAS FICA page",
+      "usedFor": "2026 OASDI wage base $184,500; employee rates 6.2% OASDI, 1.45% HI"
+    },
+    {
+      "title": "Publication 3 (2025), Armed Forces' Tax Guide",
+      "publisher": "Internal Revenue Service",
+      "url": "https://www.irs.gov/pub/irs-pdf/p3.pdf",
+      "publicationDate": "2026-01-13 (file date)",
+      "retrievedAt": "2026-10-22",
+      "retrievalMethod": "Server download (HTTPS), text extraction",
+      "sha256": "925d77d3775a677544895655b7dbd45abf38fe4838fa59445fdcc84c03ce0edc",
+      "usedFor": "Table 1 (basic pay including drills is gross income) and Table 2 (BAH and BAS excluded). This is the 2025 edition; the 2026 edition was not yet published at retrieval."
+    }
+  ],
+  "statutoryConstants": {
+    "note": "Not inflation-indexed; taken from the Internal Revenue Code, not re-retrieved in this snapshot.",
+    "items": [
+      "Child tax credit phase-out thresholds $400,000 (joint) / $200,000 (others), reduced $50 per $1,000 or fraction: 26 U.S.C. 24(b) and 24(h)(3)",
+      "Credit for other dependents $500: 26 U.S.C. 24(h)(4)",
+      "Refundable child tax credit earned-income floor $2,500 at 15%: 26 U.S.C. 24(d)(1)(B) and 24(h)(6)",
+      "Additional Medicare Tax 0.9% liability thresholds $250,000 joint / $125,000 separate / $200,000 others: 26 U.S.C. 3101(b)(2)"
+    ]
+  },
+  "validation": {
+    "status": "validated",
+    "validatedAt": "2026-10-22",
+    "checks": [
+      "Bracket thresholds strictly increase and every published base amount equals the cumulative tax at its threshold.",
+      "Each Pub 15-T STANDARD schedule equals the Rev. Proc. brackets shifted by (standard deduction - line 1g amount).",
+      "Percentage-method results agree with 2026 Pub 15-T wage-bracket rows (independent IRS table) within the $1 table rounding."
+    ]
+  },
+  "data": {
+    "filingStatuses": ["single", "mfj", "mfs", "hoh", "qss"],
+    "brackets": {
+      "rates": [0.1, 0.12, 0.22, 0.24, 0.32, 0.35, 0.37],
+      "mfj": { "thresholds": [0, 24800, 100800, 211400, 403550, 512450, 768700], "publishedBase": [0, 2480, 11600, 35932, 82048, 116896, 206583.5] },
+      "qss": { "sameAs": "mfj" },
+      "hoh": { "thresholds": [0, 17700, 67450, 105700, 201750, 256200, 640600], "publishedBase": [0, 1770, 7740, 16155, 39207, 56631, 191171] },
+      "single": { "thresholds": [0, 12400, 50400, 105700, 201775, 256225, 640600], "publishedBase": [0, 1240, 5800, 17966, 41024, 58448, 192979.25] },
+      "mfs": { "thresholds": [0, 12400, 50400, 105700, 201775, 256225, 384350], "publishedBase": [0, 1240, 5800, 17966, 41024, 58448, 103291.75] }
+    },
+    "standardDeduction": { "single": 16100, "mfs": 16100, "mfj": 32200, "qss": 32200, "hoh": 24150 },
+    "credits": {
+      "childTaxCreditPerChild": 2200,
+      "refundablePerChild": 1700,
+      "otherDependentCredit": 500,
+      "phaseOutThreshold": { "mfj": 400000, "others": 200000 },
+      "phaseOutPer1000": 50,
+      "refundableEarnedIncomeFloor": 2500,
+      "refundableRate": 0.15
+    },
+    "fica": {
+      "socialSecurityRate": 0.062,
+      "socialSecurityWageBase": 184500,
+      "medicareRate": 0.0145,
+      "additionalMedicareRate": 0.009,
+      "additionalMedicareWithholdingThreshold": 200000,
+      "additionalMedicareLiabilityThreshold": { "mfj": 250000, "mfs": 125000, "others": 200000 }
+    },
+    "withholding": {
+      "method": "Pub 15-T Worksheet 1A, Annual Percentage Method (Form W-4 2020 or later)",
+      "payPeriodsPerYear": { "semiannually": 2, "quarterly": 4, "monthly": 12, "semimonthly": 24, "biweekly": 26, "weekly": 52, "daily": 260 },
+      "line1g": { "mfj": 12900, "others": 8600 },
+      "supplementalFlatRate": 0.22,
+      "supplementalOverOneMillionRate": 0.37,
+      "tables": {
+        "standard": {
+          "mfj": [[0, 19300, 0, 0], [19300, 44100, 0, 0.1], [44100, 120100, 2480, 0.12], [120100, 230700, 11600, 0.22], [230700, 422850, 35932, 0.24], [422850, 531750, 82048, 0.32], [531750, 788000, 116896, 0.35], [788000, null, 206583.5, 0.37]],
+          "single": [[0, 7500, 0, 0], [7500, 19900, 0, 0.1], [19900, 57900, 1240, 0.12], [57900, 113200, 5800, 0.22], [113200, 209275, 17966, 0.24], [209275, 263725, 41024, 0.32], [263725, 648100, 58448, 0.35], [648100, null, 192979.25, 0.37]],
+          "hoh": [[0, 15550, 0, 0], [15550, 33250, 0, 0.1], [33250, 83000, 1770, 0.12], [83000, 121250, 7740, 0.22], [121250, 217300, 16155, 0.24], [217300, 271750, 39207, 0.32], [271750, 656150, 56631, 0.35], [656150, null, 191171, 0.37]]
+        },
+        "checkbox": {
+          "mfj": [[0, 16100, 0, 0], [16100, 28500, 0, 0.1], [28500, 66500, 1240, 0.12], [66500, 121800, 5800, 0.22], [121800, 217875, 17966, 0.24], [217875, 272325, 41024, 0.32], [272325, 400450, 58448, 0.35], [400450, null, 103291.75, 0.37]],
+          "single": [[0, 8050, 0, 0], [8050, 14250, 0, 0.1], [14250, 33250, 620, 0.12], [33250, 60900, 2900, 0.22], [60900, 108938, 8983, 0.24], [108938, 136163, 20512, 0.32], [136163, 328350, 29224, 0.35], [328350, null, 96489.63, 0.37]],
+          "hoh": [[0, 12075, 0, 0], [12075, 20925, 0, 0.1], [20925, 45800, 885, 0.12], [45800, 64925, 3870, 0.22], [64925, 112950, 8077.5, 0.24], [112950, 140175, 19603.5, 0.32], [140175, 332375, 28315.5, 0.35], [332375, null, 95585.5, 0.37]]
+        },
+        "rowFormat": "[atLeast, lessThan, baseAmount, rate]; withholding = base + rate * (adjusted annual wage - atLeast)"
+      }
+    },
+    "militaryTreatment": {
+      "includedInGrossIncome": ["Basic pay (active duty, drills, reserve training, training duty)"],
+      "excludedFromGrossIncome": ["BAH", "BAS"],
+      "stateBonusExclusion": "Pub 3 Table 2 excludes state bonus pay only for service in a combat zone."
+    }
+  }
+}
